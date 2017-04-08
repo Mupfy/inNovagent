@@ -1,12 +1,16 @@
 package innova.inNovagent.util;
 
 public class Point {
-	public int x;
-	public int y;
+	private int x;
+	private int y;
 
 	public Point(int x, int y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Point(Point orginal){
+		this(orginal.x, orginal.y);
 	}
 	
 	public Point() {
@@ -41,5 +45,13 @@ public class Point {
 	@Override
 	public String toString() {
 		return "Point[x:" + x + "|y:" + y + "]";
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
 	}
 }
