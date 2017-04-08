@@ -1,9 +1,7 @@
 package innova.inNovagent.agents;
 
-import java.awt.HeadlessException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -12,7 +10,6 @@ import org.json.JSONObject;
 import innova.inNovagent.util.Constants;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.ServiceDescriptor;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -43,6 +40,7 @@ public abstract class SynchronizedAgent extends Agent {
 	private static final String AGENT_ID = "AGENT_ID";
 
 	private Set<AID> knowAgents;
+	private Set<AgentObserver> observers;
 
 	private boolean service;
 
@@ -84,9 +82,21 @@ public abstract class SynchronizedAgent extends Agent {
 		super.takeDown();
 	}
 
-	public abstract void onSync();
+	protected abstract void onSync();
 
-	public abstract void receiveDispatchedMessage(ACLMessage msg);
+	protected abstract void receiveDispatchedMessage(ACLMessage msg, JSONObject content);
+	
+	public void addObserver(AgentObserver observer){
+		observers.add(observer);
+	}
+	
+	public void removeObserver(AgentObserver observer){
+		observers.remove(observer);
+	}
+	
+	protected void notifyObserver(Object type, Object...args){
+		this.observers.forEach( o -> o.agentModified(this,  type, args));
+	}
 
 	private void initMessageConsumer() {
 		addBehaviour(new CyclicBehaviour() {
@@ -113,7 +123,7 @@ public abstract class SynchronizedAgent extends Agent {
 			if (isMessageForMe(contentNode)) {
 				parseInformation(msg, contentNode);
 			} else {
-				receiveDispatchedMessage(msg);
+				receiveDispatchedMessage(msg, contentNode);
 			}
 		} else {
 			LOGGER.error("Got unknown msg lang with " + msg.getLanguage());
@@ -130,6 +140,7 @@ public abstract class SynchronizedAgent extends Agent {
 		
 		if(NEW_AGENT_TAG.equals(type) ){
 			this.knowAgents.add(new AID(content.getString(AGENT_ID),true) );
+			notifyObserver("NEW_AGENT", content.getString(AGENT_ID));
 			System.out.println("Nachricht empfangen" + getLocalName());
 		}else if(REMOVE_AGENT_TAG.equals(type) ){
 			this.knowAgents.remove(new AID(content.getString(AGENT_ID),true) );

@@ -20,7 +20,7 @@ public class Node {
 	private boolean isTrap;
 	private int honeyAmout;
 	private int smell;
-	private int stank;
+	private int stench;
 
 	public Node(Point position){
 		this.position = Utils.notNull(position);
@@ -55,12 +55,12 @@ public class Node {
 		return this.honeyAmout;
 	}
 
-	public boolean hasStank() {
-		return this.stank != 0;
+	public boolean hasStench() {
+		return this.stench != 0;
 	}
 
-	public int getStank() {
-		return this.stank;
+	public int getStench() {
+		return this.stench;
 	}
 
 	public boolean isTrap() {
@@ -81,6 +81,14 @@ public class Node {
 	
 	public Point getPosition() {
 		return position;
+	}
+
+	public int getSmell() {
+		return smell;
+	}
+
+	public void setSmell(int smell) {
+		this.smell = smell;
 	}
 	
 }

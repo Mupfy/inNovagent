@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.PatternLayout;
+import org.json.JSONObject;
 
 import innova.inNovagent.agents.SynchronizedAgent;
 import jade.core.Profile;
@@ -28,7 +29,7 @@ public final class Main {
 		}
 
 		@Override
-		public void receiveDispatchedMessage(ACLMessage msg) {
+		public void receiveDispatchedMessage(ACLMessage msg, JSONObject rootNode) {
 			// TODO Auto-generated method stub
 
 		}
