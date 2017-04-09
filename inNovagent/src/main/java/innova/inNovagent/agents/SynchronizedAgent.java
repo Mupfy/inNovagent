@@ -46,6 +46,7 @@ public abstract class SynchronizedAgent extends Agent {
 
 	public SynchronizedAgent() {
 		this.knowAgents = new HashSet<>();
+		this.observers = new HashSet<>();
 	}
 
 	public Set<AID> getKnownAgents() {
