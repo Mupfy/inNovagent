@@ -5,7 +5,6 @@ import java.util.Collection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import innova.inNovagent.communication.AntWorldMessageTranslator;
 import innova.inNovagent.core.Node;
 import innova.inNovagent.core.NodeMap;
 import innova.inNovagent.util.Constants;
@@ -13,8 +12,6 @@ import innova.inNovagent.util.Point;
 import jade.lang.acl.ACLMessage;
 
 public class SyncMapAgent extends SynchronizedAgent{
-	
-	private static final AntWorldMessageTranslator MESSAGE_TRANSLATOR = null; //TODO: 2016 VERSIONES machen
 	
 	public static final String MAP_UPDATED_TYPE = "map_updated";
 	
