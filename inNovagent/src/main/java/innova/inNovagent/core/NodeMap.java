@@ -42,17 +42,12 @@ public class NodeMap {
 		return res;
 	}
 	
-	/**
-	 * Returns a Node at the given position or null if not present.
-	 * @param point
-	 * @return A node or {@code null}
-	 */
-	public Node getNode(Point point){
-		return this.field.get(point);
-	}
-	
 	public Map<Point, Node> getField() {
 		return field;
+	}
+
+	public Node getNode(int x, int y) {
+		return this.field.get(new Point(x, y));
 	}
 
 }

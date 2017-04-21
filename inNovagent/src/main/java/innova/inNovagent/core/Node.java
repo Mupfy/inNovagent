@@ -18,7 +18,7 @@ public class Node {
 
 	private boolean isStone;
 	private boolean isTrap;
-	private int honeyAmout;
+	private int honeyAmount;
 	private int smell;
 	private int stench;
 
@@ -48,11 +48,11 @@ public class Node {
 	}
 	
 	public boolean hasHoney() {
-		return this.honeyAmout != 0;
+		return this.honeyAmount != 0;
 	}
 
 	public int getHoneyAmount() {
-		return this.honeyAmout;
+		return this.honeyAmount;
 	}
 
 	public boolean hasStench() {
@@ -65,6 +65,14 @@ public class Node {
 
 	public boolean isTrap() {
 		return this.isTrap;
+	}
+	
+	public boolean isStone() {
+		return this.isStone;
+	}
+	
+	public void setHoneyAmount(int honeyAmount) {
+		this.honeyAmount = honeyAmount;
 	}
 	
 	public boolean isAccessible(){
@@ -89,6 +97,14 @@ public class Node {
 
 	public void setSmell(int smell) {
 		this.smell = smell;
+	}
+
+	public void setStone(boolean isStone) {
+		this.isStone = isStone;
+	}
+
+	public void setTrap(boolean isTrap) {
+		this.isTrap = isTrap;
 	}
 	
 }
