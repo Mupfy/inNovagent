@@ -12,12 +12,13 @@ import innova.inNovagent.util.Utils;
  */
 public class Node {
 	private Point position;
-
+	
 	private Set<Node> neighbours;
 	
 
 	private boolean isStone;
 	private boolean isTrap;
+	private boolean isVisited;
 	private int honeyAmount;
 	private int smell;
 	private int stench;
@@ -67,20 +68,30 @@ public class Node {
 		return this.isTrap;
 	}
 	
+	public boolean isVisited(){
+		return this.isVisited;
+	}
+	
+	public void setVisited(boolean visited){
+		this.isVisited = visited;
+	}	
+	
 	public boolean isStone() {
 		return this.isStone;
 	}
 	
-	public void setHoneyAmount(int honeyAmount) {
+	public Node setHoneyAmount(int honeyAmount) {
 		this.honeyAmount = honeyAmount;
+		return this;
 	}
 	
 	public boolean isAccessible(){
 		return !this.isStone && !this.isTrap;
 	}
 
-	public void addNeighbour(Node earl){
+	public Node addNeighbour(Node earl){
 		this.neighbours.add(earl);
+		return this;
 	}
 	
 	public Set<Node> getNeighbours() {
@@ -95,16 +106,19 @@ public class Node {
 		return smell;
 	}
 
-	public void setSmell(int smell) {
+	public Node setSmell(int smell) {
 		this.smell = smell;
+		return this;
 	}
 
-	public void setStone(boolean isStone) {
+	public Node setStone(boolean isStone) {
 		this.isStone = isStone;
+		return this;
 	}
 
-	public void setTrap(boolean isTrap) {
+	public Node setTrap(boolean isTrap) {
 		this.isTrap = isTrap;
+		return this;
 	}
 	
 }
