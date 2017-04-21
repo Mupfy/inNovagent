@@ -1,5 +1,7 @@
 package innova.inNovagent.agents;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -177,7 +179,7 @@ public abstract class SynchronizedAgent extends Agent {
 	private void distributeNewAgent(JSONObject obj){
 		String newAgent = obj.getString(AGENT_ID);
 		JSONObject content = new JSONObject().put(AGENT_ID, newAgent).put(MESSAGE_TYPE, NEW_AGENT_TAG);
-		sendInternalMessage(content, SYNCRONIZED_AGENT_MESSAGE_TAG, knowAgents.toArray(new AID[knowAgents.size()]));
+		sendInternalMessage(content, SYNCRONIZED_AGENT_MESSAGE_TAG, knowAgents);
 	}
 
 	private void initService() {
@@ -209,11 +211,22 @@ public abstract class SynchronizedAgent extends Agent {
 			return null;
 		}
 	}
-
-	protected void sendInternalMessage(JSONObject content, String messageType, AID... receiver) {
+	
+	/**
+	 * Wraps the given content in the internal communication overhead.
+	 * @param content 
+	 * @param messageType
+	 * @return Header with content payload.
+	 */
+	protected JSONObject applyHeader(JSONObject content, String messageType){
 		JSONObject obj = new JSONObject();
 		obj.put(Constants.INTERNAL_MESSAGE_TYPE, messageType);
 		obj.put(Constants.MESSAGE_CONTENT, content);
+		return obj;
+	}
+	
+	protected void sendInternalMessage(JSONObject content, String messageType, Collection<AID> receiver){
+		JSONObject obj = applyHeader(content, messageType);
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		for (AID r : receiver) {
 			msg.addReceiver(r);
@@ -223,5 +236,9 @@ public abstract class SynchronizedAgent extends Agent {
 		msg.setContent(obj.toString());
 		send(msg);
 		LOGGER.info("[MESSAGE SEND, content: "+obj.toString(4)+"]"); 
+	}
+	
+	protected void sendInternalMessage(JSONObject content, String messageType, AID... receiver) {
+		sendInternalMessage(content, messageType, Arrays.asList(receiver));
 	}
 }

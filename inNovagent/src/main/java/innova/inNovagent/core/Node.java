@@ -3,6 +3,8 @@ package innova.inNovagent.core;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.json.JSONObject;
+
 import innova.inNovagent.util.Point;
 import innova.inNovagent.util.Utils;
 
@@ -118,6 +120,11 @@ public class Node {
 
 	public Node setTrap(boolean isTrap) {
 		this.isTrap = isTrap;
+		return this;
+	}
+	
+	public Node setStench(int stenchAmount){
+		this.stench = stenchAmount;
 		return this;
 	}
 	
