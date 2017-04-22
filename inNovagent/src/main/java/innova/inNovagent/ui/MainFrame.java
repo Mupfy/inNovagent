@@ -1,4 +1,4 @@
-package innova.inNovagent.gui;
+package innova.inNovagent.ui;
 
 import javax.swing.JFrame;
 
@@ -9,7 +9,7 @@ public class MainFrame extends JFrame {
 		add(new MapPainter());
 
 		pack();
-		setResizable(false);
+//		setResizable(false);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
