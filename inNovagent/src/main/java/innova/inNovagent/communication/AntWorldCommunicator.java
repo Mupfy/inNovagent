@@ -1,5 +1,7 @@
 package innova.inNovagent.communication;
 
+import jade.lang.acl.ACLMessage;
+
 public interface AntWorldCommunicator {
 	public void moveUp();
 	public void moveDown();
@@ -8,4 +10,7 @@ public interface AntWorldCommunicator {
 
 	public void pickUp();
 	public void drop();
+	
+	public void login();
+	public void setLastMessage(ACLMessage msg);
 }

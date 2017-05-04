@@ -29,6 +29,10 @@ public class SyncMapAgent extends SynchronizedAgent{
 	
 	private NodeMap nodeMap;
 	
+	public SyncMapAgent(){
+		this.nodeMap = new NodeMap();
+	}
+	
 	public NodeMap getMap(){
 		return this.nodeMap;
 	}
@@ -36,6 +40,13 @@ public class SyncMapAgent extends SynchronizedAgent{
 	@Override
 	public void onSync() {
 		sendMapRequest();
+	}
+	
+	/**
+	 * Called in the moment the map is synchronized with existing agents.
+	 * Will only be called once at the beginning of the agent lifecycle.
+	 */
+	protected void onMapSynchronized(){		
 	}
 
 	@Override
@@ -53,10 +64,11 @@ public class SyncMapAgent extends SynchronizedAgent{
 			answerMapRequest(msg);
 		}else if(rootNode.getString(Constants.INTERNAL_MESSAGE_TYPE).equals(RESPONSE_WHOLE_MAP) ){
 			JSONObject content = rootNode.getJSONObject(Constants.MESSAGE_CONTENT);
-			JSONArray array = new JSONArray(content.get(MAP_PAYLOAD));
+			JSONArray array = new JSONArray(content.get(MAP_PAYLOAD).toString());
 			for(Object obj : array){
 				parseMapInformation((JSONObject)obj);
 			}
+			onMapSynchronized();
 		}
 	}
 	

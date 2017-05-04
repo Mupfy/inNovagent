@@ -7,6 +7,7 @@ import org.apache.log4j.FileAppender;
 import org.apache.log4j.PatternLayout;
 import org.json.JSONObject;
 
+import innova.inNovagent.agents.Innovagent;
 import innova.inNovagent.agents.SynchronizedAgent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -46,18 +47,13 @@ public final class Main {
 		Profile profile = new ProfileImpl("localhost", -1, null, false);
 		AgentContainer container = jadeRuntime.createAgentContainer(profile);
 
-		AgentController controller1 = container.createNewAgent("name1", TestAgent.class.getName(), new String[0]);
-
-		AgentController controller2 = container.createNewAgent("name2", TestAgent.class.getName(), new String[0]);
-		AgentController controller3 = container.createNewAgent("name3", TestAgent.class.getName(), new String[0]);
-
+		AgentController controller1 = container.createNewAgent("Innova1", Innovagent.class.getName(), new String[0]);
+		
 		controller1.start();
 		try {
 			Thread.sleep(500);
 		} catch (Exception e) {
 
 		}
-		controller2.start();
-		controller3.start();
 	}
 }

@@ -129,7 +129,7 @@ public abstract class SynchronizedAgent extends Agent {
 				receiveDispatchedMessage(msg, contentNode);
 			}
 		} else {
-			LOGGER.error("Got unknown msg lang with " + msg.getLanguage());
+			LOGGER.error("Got unknown msg lang with " + msg.getLanguage() + "with msg: " + msg);
 		}
 	}
 
