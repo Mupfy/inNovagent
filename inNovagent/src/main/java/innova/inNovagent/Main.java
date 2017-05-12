@@ -1,6 +1,9 @@
 package innova.inNovagent;
 
+import java.awt.BorderLayout;
 import java.io.IOException;
+
+import javax.swing.JFrame;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.FileAppender;
@@ -9,6 +12,7 @@ import org.json.JSONObject;
 
 import innova.inNovagent.agents.Innovagent;
 import innova.inNovagent.agents.SynchronizedAgent;
+import innova.inNovagent.ui.ControlCenter;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -43,17 +47,12 @@ public final class Main {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		Runtime jadeRuntime = Runtime.instance();
-		Profile profile = new ProfileImpl("localhost", -1, null, false);
-		AgentContainer container = jadeRuntime.createAgentContainer(profile);
-
-		AgentController controller1 = container.createNewAgent("Innova1", Innovagent.class.getName(), new String[0]);
 		
-		controller1.start();
-		try {
-			Thread.sleep(500);
-		} catch (Exception e) {
-
-		}
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setLayout(new BorderLayout());
+		frame.add(new ControlCenter());
+		frame.setSize(200, 750);
+		frame.setVisible(true);
 	}
 }

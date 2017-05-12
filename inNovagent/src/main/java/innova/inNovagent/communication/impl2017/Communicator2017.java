@@ -84,7 +84,7 @@ public class Communicator2017 implements AntWorldCommunicator{
 		content.put("color", "ANT_COLOR_BLUE");
 		msg.setContent( content.toString());
 		this.agent.send(msg);
-		LOGGER.info("Sending ACL-Message for " + this.agent + " with " + content.toString(4) + " WHOTE MSG: " + msg);
+		LOGGER.info("Sending ACL-Message for " + this.agent + " with " + content.toString(4) + " WROTE MSG: " + msg);
 	}
 	
 	private AID findAntWorld(){
@@ -99,7 +99,12 @@ public class Communicator2017 implements AntWorldCommunicator{
 			DFAgentDescription[] results = DFService.search(agent, dfd);
 			System.out.println("... 2");
 			System.out.println(results);
-			return results[0].getName();
+			if(results.length < 1){
+				LOGGER.error("Antworld not found");
+				return null;
+			}else{
+				return results[0].getName();
+			}
 		} catch (FIPAException e) {
 			LOGGER.error(e);
 			return null;

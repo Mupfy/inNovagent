@@ -64,6 +64,7 @@ public abstract class SynchronizedAgent extends Agent {
 
 		if (serviceDescription.length == 0) {
 			initService();
+			onSync();
 		}else{
 			JSONObject content = new JSONObject().put(MESSAGE_TYPE, REGISTER_AGENT_TAG).put(AGENT_ID, getName());
 			sendInternalMessage(content, SYNCRONIZED_AGENT_MESSAGE_TAG, serviceDescription[0].getName());
