@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import innova.inNovagent.agents.Innovagent;
 import innova.inNovagent.core.AgentLuncher;
+import innova.inNovagent.util.FunStuff;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
@@ -57,7 +58,7 @@ public class ControlCenter extends JPanel{
 		//Lunch Button
 		JButton lunchBttn = new JButton("Lunch");
 		lunchBttn.addActionListener( e -> {
-			this.agentOverviewContainer.add(createAgentControl("Innovagent_Nr_"+ agentCounter++));
+			this.agentOverviewContainer.add(createAgentControl(FunStuff.createNameForAgent()));
 			this.agentOverviewContainer.revalidate();
 		});
 		++c.gridy;

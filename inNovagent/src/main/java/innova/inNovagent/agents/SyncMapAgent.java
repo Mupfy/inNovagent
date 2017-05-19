@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.omg.PortableServer.ServantRetentionPolicyValue;
 
 import innova.inNovagent.core.Node;
 import innova.inNovagent.core.NodeMap;
@@ -26,8 +27,9 @@ public class SyncMapAgent extends SynchronizedAgent{
 	private static final String TRAP_MARKER = "TRAP";
 	private static final String STONE_MARKER = "STONE";
 	private static final String STENCH_AMOUNT = "STENCH_AMOUNT";
+	private static final String VISITED = "VISITED";
 	
-	private NodeMap nodeMap;
+	protected NodeMap nodeMap;
 	
 	public SyncMapAgent(){
 		this.nodeMap = new NodeMap();
@@ -92,7 +94,8 @@ public class SyncMapAgent extends SynchronizedAgent{
 		.setSmell(mapNodeObject.getInt(SMELL_AMOUNT))
 		.setStone(mapNodeObject.getBoolean(STONE_MARKER))
 		.setTrap(mapNodeObject.getBoolean(TRAP_MARKER))
-		.setStench(mapNodeObject.getInt(STENCH_AMOUNT));
+		.setStench(mapNodeObject.getInt(STENCH_AMOUNT))
+		.setVisited(mapNodeObject.getBoolean(VISITED));
 	}
 	
 	private JSONObject nodeToJSON(Node data){
@@ -102,7 +105,9 @@ public class SyncMapAgent extends SynchronizedAgent{
 		.put(HONEY_AMOUNT, data.getHoneyAmount())
 		.put(SMELL_AMOUNT, data.getSmell())
 		.put(STONE_MARKER, data.isStone())
-		.put(STENCH_AMOUNT, data.getStench());
+		.put(STENCH_AMOUNT, data.getStench())
+		.put(TRAP_MARKER, data.isTrap())
+		.put(VISITED, data.isVisited());
 	}
 	
 	private JSONArray mapToJSON(){
@@ -118,6 +123,6 @@ public class SyncMapAgent extends SynchronizedAgent{
 		for(Node n : data){
 			array.put(nodeToJSON(n));
 		}
-		sendInternalMessage(new JSONObject().put("MAP", array), MAP_INFORMATION_UPDATED, getKnownAgents() );
+		sendInternalMessage(new JSONObject().put(MAP_PAYLOAD, array), MAP_INFORMATION_UPDATED, getKnownAgents() );
 	}
 }

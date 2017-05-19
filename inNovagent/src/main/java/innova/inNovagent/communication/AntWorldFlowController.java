@@ -6,13 +6,13 @@ import innova.inNovagent.util.Point;
 
 public interface AntWorldFlowController {
 	interface OnDeathCallback {
-		public void callback(int x, int y);
+		public void callback();
 	}
 	interface OnMovementCallback {
 		public void onSuccessfulMovement(NodeInformationTO data);
 	}
 	interface OnFailedMovementCallback {
-		public void onFailedMovement(Point target);
+		public void onFailedMovement();
 	}
 	interface PositionAccess {
 		public Point getLastPosition();
@@ -21,7 +21,6 @@ public interface AntWorldFlowController {
 	public void setOnDeathCallback(OnDeathCallback callback);
 	public void setOnSuccessfulMovement(OnMovementCallback callback);
 	public void setOnFailedMovement(OnFailedMovementCallback callback);
-	public void setPositionGetter(PositionAccess access);
 	
 	public void setMessageTranslator(AntWorldMessageTranslator translator);
 	

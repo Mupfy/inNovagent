@@ -72,8 +72,9 @@ public class Node {
 		return this.isVisited;
 	}
 	
-	public void setVisited(boolean visited){
+	public Node setVisited(boolean visited){
 		this.isVisited = visited;
+		return this;
 	}	
 	
 	public boolean isStone() {

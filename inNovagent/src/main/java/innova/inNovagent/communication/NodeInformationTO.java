@@ -1,5 +1,13 @@
 package innova.inNovagent.communication;
 
+import innova.inNovagent.core.Node;
+
+/**
+ * Simple Data-Holder to store information about Antworld.
+ * If you look for a real Node implementation look at {@link Node}
+ * @author Tyrone
+ *
+ */
 public class NodeInformationTO {
 
 	private int x;
@@ -10,7 +18,12 @@ public class NodeInformationTO {
 	private boolean stone;
 	private boolean trap;
 	private boolean visited;
-
+	
+	/**
+	 * This x is from antworlds-coordinate system.
+	 * Don't use it for internal stuff. 
+	 * @return
+	 */
 	public int getX() {
 		return x;
 	}
@@ -18,7 +31,12 @@ public class NodeInformationTO {
 	public void setX(int x) {
 		this.x = x;
 	}
-
+	
+	/**
+	 * This y is from antworlds-coordinate system.
+	 * Don't use it for internal stuff. 
+	 * @return
+	 */
 	public int getY() {
 		return y;
 	}

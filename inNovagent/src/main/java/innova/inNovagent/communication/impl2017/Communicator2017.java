@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import innova.inNovagent.communication.AntWorldCommunicator;
 import innova.inNovagent.util.Constants;
+import innova.inNovagent.util.Utils;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -66,7 +67,7 @@ public class Communicator2017 implements AntWorldCommunicator{
 		JSONObject birthRequest = new JSONObject();
 		birthRequest
 		.put("type", "ANT_ACTION_BIRTH")
-		.put("color", "ANT_COLOR_BLUE");
+		.put("color", "ANT_COLOR_BLUE"); // TODO: Make color choosable from a menu.
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(antworld2017Agent);
 		msg.setContent(birthRequest.toString());
@@ -84,7 +85,7 @@ public class Communicator2017 implements AntWorldCommunicator{
 		content.put("color", "ANT_COLOR_BLUE");
 		msg.setContent( content.toString());
 		this.agent.send(msg);
-		LOGGER.info("Sending ACL-Message for " + this.agent + " with " + content.toString(4) + " WROTE MSG: " + msg);
+		Utils.consistentAgentLog(LOGGER, agent.getLocalName(), "sending ACL-Message with: " + content.toString(4) + " GENERATED ACL message " + msg);
 	}
 	
 	private AID findAntWorld(){
@@ -92,13 +93,9 @@ public class Communicator2017 implements AntWorldCommunicator{
 		filter.setType("antworld2017");
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.addServices(filter);
-		System.out.println(agent);
-		try {
-			System.out.println(dfd);
-			System.out.println("...");
+		
+		try {			
 			DFAgentDescription[] results = DFService.search(agent, dfd);
-			System.out.println("... 2");
-			System.out.println(results);
 			if(results.length < 1){
 				LOGGER.error("Antworld not found");
 				return null;

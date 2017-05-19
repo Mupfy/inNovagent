@@ -49,5 +49,9 @@ public class NodeMap {
 	public Node getNode(int x, int y) {
 		return this.field.get(new Point(x, y));
 	}
+	
+	public Node getNode(Point point){
+		return getNode(point.getX(), point.getY());
+	}
 
 }
