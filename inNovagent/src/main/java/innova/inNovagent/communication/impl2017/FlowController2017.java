@@ -13,11 +13,16 @@ public class FlowController2017 implements AntWorldFlowController{
 	
 	private static final Logger LOGGER = Logger.getLogger(FlowController2017.class);
 	
+	private static final String PICK_ACTION = "ANT_ACTION_PICK";
+	private static final String DROP_ACTION = "ANT_ACTION_DROP";
+	
 	private OnDeathCallback deathCallback;
 	private OnMovementCallback movementCallback;
 	private OnFailedMovementCallback failedMovementCallback;
 	private AntWorldMessageTranslator messageTranslator;
 	private PositionAccess positionAccess;
+	private Runnable onPick;
+	private Runnable onDrop;
 	
 	/**
 	 * These are the x and y of antworld and not of the internal used coordinates
@@ -50,6 +55,16 @@ public class FlowController2017 implements AntWorldFlowController{
 		LOGGER.debug("Starting to consume Message");
 		NodeInformationTO data = messageTranslator.translate(rootNode);
 		
+		if(PICK_ACTION.equals(rootNode.getString("action"))){
+			this.onPick.run();
+			return;
+		}
+		
+		if(DROP_ACTION.equals(rootNode.getString("action"))){
+			this.onDrop.run();
+			return;
+		}
+		
 		if(data.isTrap()){ //Currently order of if-statements is important. If you die you don't have moved to.
 			this.deathCallback.callback();
 			LOGGER.debug("Ending consuming with: death");
@@ -67,6 +82,16 @@ public class FlowController2017 implements AntWorldFlowController{
 		this.y = data.getY();
 		this.movementCallback.onSuccessfulMovement(data);
 		LOGGER.debug("Ending consuming with: success");
+	}
+
+	@Override
+	public void setOnDropCallback(Runnable callback) {
+		this.onDrop = Utils.notNull(callback);
+	}
+
+	@Override
+	public void setOnPickCallback(Runnable callback) {
+		this.onPick = Utils.notNull(callback);
 	}
 	
 }

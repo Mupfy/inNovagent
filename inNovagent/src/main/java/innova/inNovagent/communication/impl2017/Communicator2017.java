@@ -31,34 +31,32 @@ public class Communicator2017 implements AntWorldCommunicator{
 
 	@Override
 	public void moveUp() {
-		move("ANT_ACTION_GOUP");
+		action("ANT_ACTION_GOUP");
 	}
 
 	@Override
 	public void moveDown() {
-		move("ANT_ACTION_GODOWN");
+		action("ANT_ACTION_GODOWN");
 	}
 
 	@Override
 	public void moveLeft() {
-		move("ANT_ACTION_GOLEFT");
+		action("ANT_ACTION_GOLEFT");
 	}
 
 	@Override
 	public void moveRight() {
-		move("ANT_ACTION_GORIGHT");
+		action("ANT_ACTION_GORIGHT");
 	}
 
 	@Override
 	public void pickUp() {
-		// TODO Auto-generated method stub
-		
+		action("ANT_ACTION_PICK");
 	}
 
 	@Override
 	public void drop() {
-		// TODO Auto-generated method stub
-		
+		action("ANT_ACTION_DROP");
 	}
 
 	@Override
@@ -75,13 +73,13 @@ public class Communicator2017 implements AntWorldCommunicator{
 		agent.send(msg);
 	}
 	
-	private void move(String direction){
+	private void action(String command){
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(antworld2017Agent);
 		msg.setInReplyTo(lastMessage.getReplyWith());
 		msg.setLanguage(Constants.JSON_TAG);
 		
-		JSONObject content = new JSONObject().put("type", direction);
+		JSONObject content = new JSONObject().put("type", command);
 		content.put("color", "ANT_COLOR_BLUE");
 		msg.setContent( content.toString());
 		this.agent.send(msg);

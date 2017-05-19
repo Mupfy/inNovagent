@@ -9,11 +9,12 @@ import innova.inNovagent.util.Point;
 
 public interface Pathfinding {
 	
-	public enum Direction {UP, DOWN, LEFT, RIGHT}
+	public enum Direction {UP, DOWN, LEFT, RIGHT, UNKNOWN}
 	
 	public void setNodeFilter(Predicate<Node> filter);
 	public void recalculateMap(NodeMap map, Point source);
 	public Direction getNextStep(Point target);
 	public List<Node> getNearestUnvisited();
+	public List<Node> getNearest(Predicate<Node> include);
 	
 }

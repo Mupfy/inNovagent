@@ -151,4 +151,26 @@ public class DijkstraPathfinding implements Pathfinding{
 		this.currentSource = Utils.notNull(source);
 		createSingleSourceShortestPath(currentMap, currentSource);
 	}
+
+	@Override
+	public List<Node> getNearest(Predicate<Node> include) {
+		PriorityQueue<Data> queue = new PriorityQueue<>( (d1,d2) -> d1.distance - d2.distance);
+		queue.addAll(this.allNodes);
+		int maxDist = -1;
+		List<Node> resultList = new ArrayList<>();
+		while(!queue.isEmpty()){
+			Data current = queue.poll();
+			if(include.test(current.father)){
+				if(maxDist == -1){
+					maxDist = current.distance;
+				}else{
+					if(current.distance > maxDist){
+						break;
+					}
+				}
+				resultList.add(current.father);
+			}
+		}
+		return resultList;
+	}
 }

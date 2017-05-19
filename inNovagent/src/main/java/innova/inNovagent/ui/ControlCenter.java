@@ -17,7 +17,7 @@ import javax.swing.border.Border;
 import org.apache.log4j.Logger;
 
 import innova.inNovagent.agents.Innovagent;
-import innova.inNovagent.core.AgentLuncher;
+import innova.inNovagent.core.AgentLauncher;
 import innova.inNovagent.util.FunStuff;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -43,7 +43,7 @@ public class ControlCenter extends JPanel{
 		GridBagConstraints c = new GridBagConstraints();
 		JLabel ipLabel = new JLabel("IP:");
 		JButton applyIpBttn = new JButton("OK");
-		applyIpBttn.addActionListener( e -> AgentLuncher.instance().setIPAdress(this.ipInputField.getText()));
+		applyIpBttn.addActionListener( e -> AgentLauncher.instance().setIPAdress(this.ipInputField.getText()));
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
@@ -91,7 +91,7 @@ public class ControlCenter extends JPanel{
 		panel.add(label);
 		panel.add(killBttn);
 		
-		final AgentController target = AgentLuncher.instance().createAgent(agentName, Innovagent.class);
+		final AgentController target = AgentLauncher.instance().createAgent(agentName, Innovagent.class);
 		try {
 			target.start();
 		} catch (Exception e) {

@@ -43,7 +43,7 @@ public final class Utils {
 		}else if( y < 0){
 			return Direction.DOWN;
 		}else{
-			throw new RuntimeException("Should not happen: " + new Point(x,y)); //TODO: Could add an enum CURRENT if you are at the position
+			return Direction.UNKNOWN;
 		}
 	}
 	

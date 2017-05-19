@@ -9,23 +9,23 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
-public final class AgentLuncher {
+public final class AgentLauncher {
 	
 	private static final String[] EMPTY_ARRAY = new String[0];
-	private static final Logger LOGGER = Logger.getLogger(AgentLuncher.class);
-	private static final AgentLuncher INSTANCE = new AgentLuncher();
+	private static final Logger LOGGER = Logger.getLogger(AgentLauncher.class);
+	private static final AgentLauncher INSTANCE = new AgentLauncher();
 	private static final Runtime JADE_RUNTIME = Runtime.instance();
 	private Profile currentProfile;
 	private AgentContainer targetJadeContainer;
 	
-	public static AgentLuncher instance(){
-		return AgentLuncher.INSTANCE;
+	public static AgentLauncher instance(){
+		return AgentLauncher.INSTANCE;
 	}
 	
-	private AgentLuncher(){		
+	private AgentLauncher(){		
 	}
 	
-	public AgentLuncher setIPAdress(String host){
+	public AgentLauncher setIPAdress(String host){
 		if(this.currentProfile != null){
 			LOGGER.info("Created a new Profile over an existing one");
 		}

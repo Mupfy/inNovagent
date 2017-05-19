@@ -21,6 +21,8 @@ public interface AntWorldFlowController {
 	public void setOnDeathCallback(OnDeathCallback callback);
 	public void setOnSuccessfulMovement(OnMovementCallback callback);
 	public void setOnFailedMovement(OnFailedMovementCallback callback);
+	public void setOnDropCallback(Runnable callback);
+	public void setOnPickCallback(Runnable callback);
 	
 	public void setMessageTranslator(AntWorldMessageTranslator translator);
 	
