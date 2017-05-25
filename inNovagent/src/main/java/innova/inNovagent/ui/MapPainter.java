@@ -6,111 +6,90 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import innova.inNovagent.agents.SyncMapAgent;
 import innova.inNovagent.core.Node;
 import innova.inNovagent.core.NodeMap;
-import innova.inNovagent.util.Point;
 
 public class MapPainter extends JPanel {
-	private int xMin;
-	private int yMin;
-	private int noOfSquaresX;
-	private int noOfSquaresY;
+	private SyncMapAgent mapPainterAgent;
 
-	private NodeMap map;
+	private static Color BACKGROUND_COLOR = new Color(130, 150, 150);
+	private static Color TRAP_COLOR = Color.RED;
+	private static Color STONE_COLOR = Color.BLACK;
+	private static Color VISITED_COLOR = Color.GREEN;
+	private static Color UNVISITED_COLOR = Color.WHITE;
+	private static Color HONEY_COLOR = Color.YELLOW;
+	private static Color TEXT_GRID_COLOR = Color.BLACK;
 
-	public MapPainter() {
-		xMin = -5;
-		yMin = -5;
-		noOfSquaresX = 12;
-		noOfSquaresY = 10;
+	public MapPainter(SyncMapAgent mapPainterAgent) {
+		this.mapPainterAgent = mapPainterAgent;
 
-		createMap();
-
-		setPreferredSize(new Dimension(noOfSquaresX * 60, noOfSquaresY * 60));
-	}
-
-	// TODO just for testing
-	private void createMap() {
-		map = new NodeMap();
-		Node node1 = map.createOrGet(new Point(0, 0));
-		node1.setVisited(true);
-		node1.setStone(true);
-		Node node2 = map.createOrGet(new Point(-2, -5));
-		node2.setVisited(true);
-		node2.setTrap(true);
-		Node node3 = map.createOrGet(new Point(3, 3));
-		node3.setVisited(true);
-		node3.setHoneyAmount(5);
-		Node node4 = map.createOrGet(new Point(3, 1));
-		node4.setVisited(true);
-		node4.setHoneyAmount(30);
-		Node node5 = map.createOrGet(new Point(1, 1));
-		node5.setVisited(false);
+		setPreferredSize(new Dimension(800, 800));
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		setBackground(new Color(130, 150, 150));
+		setBackground(BACKGROUND_COLOR);
 
-		int squareWidth = getWidth() / noOfSquaresX;
-		int squareHeight = getHeight() / noOfSquaresY;
-		paintSquares(g, squareWidth, squareHeight);
-		paintGrid(g, squareWidth, squareHeight);
+		NodeMap map = mapPainterAgent.getMap();
+		int squareWidth = getWidth() / map.getWidth();
+		int squareHeight = getHeight() / map.getHeight();
+		paintSquares(g, map, squareWidth, squareHeight);
+		paintGrid(g, map, squareWidth, squareHeight);
 	}
 
-	private void paintSquares(Graphics g, int squareWidth, int squareHeight) {
-		if (map != null) { // TODO kann weg, ist nur für test-main da (mit
-							// createMap())
-			for (int x = xMin; x < xMin + noOfSquaresX; ++x) {
-				for (int y = yMin; y < yMin + noOfSquaresY; ++y) {
-					Node node = map.getNode(x, y);
-					if (node != null) {
-						paintNode(node, x, y, squareWidth, squareHeight, g);
-					}
+	private void paintSquares(Graphics g, NodeMap map, int squareWidth, int squareHeight) {
+		for (int x = map.getMinX(); x < map.getMinX() + map.getWidth(); ++x) {
+			for (int y = map.getMinY(); y < map.getMinY() + map.getHeight(); ++y) {
+				Node node = map.getNode(x, y);
+				if (node != null) {
+					paintNode(node, x, y, map, squareWidth, squareHeight, g);
 				}
 			}
 		}
 	}
 
-	private void paintNode(Node node, int x, int y, int squareWidth, int squareHeight, Graphics g) {
+	private void paintNode(Node node, int x, int y, NodeMap map, int squareWidth, int squareHeight, Graphics g) {
 		if (node.isTrap()) {
-			g.setColor(Color.RED);
+			g.setColor(TRAP_COLOR);
 		} else if (node.isStone()) {
-			g.setColor(Color.BLACK);
+			g.setColor(STONE_COLOR);
 		} else if (node.isVisited()) {
-			g.setColor(Color.GREEN);
+			g.setColor(VISITED_COLOR);
 		} else {
-			g.setColor(Color.WHITE);
+			g.setColor(UNVISITED_COLOR);
 		}
-		g.fillRect((x - xMin) * squareWidth, (y - yMin) * squareHeight, squareWidth, squareHeight);
-		paintHoney(node, x, y, squareWidth, squareHeight, g);
+		g.fillRect((x - map.getMinX()) * squareWidth, getHeight() - (y - map.getMinY()) * squareHeight, squareWidth, squareHeight);
+		paintHoney(node, x, y, map, squareWidth, squareHeight, g);
 	}
 
-	private void paintHoney(Node node, int x, int y, int squareWidth, int squareHeight, Graphics g) {
+	private void paintHoney(Node node, int x, int y, NodeMap map, int squareWidth, int squareHeight, Graphics g) {
 		int honeyAmount = node.getHoneyAmount();
 		if (honeyAmount != 0) {
-			g.setColor(Color.YELLOW);
+			g.setColor(HONEY_COLOR);
 			int xEdge = squareWidth / 4;
 			int yEdge = squareHeight / 4;
-			g.fillRect((x - xMin) * squareWidth + xEdge, (y - yMin) * squareHeight + yEdge, squareWidth - 2 * xEdge,
-					squareHeight - 2 * yEdge);
+			g.fillRect((x - map.getMinX()) * squareWidth + xEdge, getHeight() - (y - map.getMinY()) * squareHeight + yEdge,
+					squareWidth - 2 * xEdge, squareHeight - 2 * yEdge);
 
 			String text = String.valueOf(honeyAmount);
-			int labelX = (int) ((x - xMin) * squareWidth + squareWidth / 2 - g.getFontMetrics().stringWidth(text) / 2);
-			int labelY = (int) ((y - yMin) * squareHeight + squareHeight / 2 + g.getFontMetrics().getHeight() / 4);
-			g.setColor(Color.BLACK);
+			int labelX = (int) ((x - map.getMinX()) * squareWidth + squareWidth / 2
+					- g.getFontMetrics().stringWidth(text) / 2);
+			int labelY = (int) (getHeight() - (y - map.getMinY()) * squareHeight + squareHeight / 2
+					+ g.getFontMetrics().getHeight() / 4);
+			g.setColor(TEXT_GRID_COLOR);
 			g.drawString(text, labelX, labelY);
 		}
 	}
 
-	private void paintGrid(Graphics g, int squareWidth, int squareHeight) {
-		g.setColor(Color.BLACK);
-		for (int i = 1; i < noOfSquaresX; ++i) {
+	private void paintGrid(Graphics g, NodeMap map, int squareWidth, int squareHeight) {
+		g.setColor(TEXT_GRID_COLOR);
+		for (int i = 1; i < map.getWidth(); ++i) {
 			g.drawLine(i * squareWidth, 0, i * squareWidth, getHeight());
 		}
-		for (int i = 1; i < noOfSquaresY; ++i) {
-			g.drawLine(0, i * squareHeight, getWidth(), i * squareHeight);
+		for (int i = 1; i < map.getHeight(); ++i) {
+			g.drawLine(0, getHeight() - i * squareHeight, getWidth(), getHeight() - i * squareHeight);
 		}
 	}
 }

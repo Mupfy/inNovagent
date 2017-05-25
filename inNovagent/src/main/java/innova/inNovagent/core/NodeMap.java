@@ -9,9 +9,19 @@ import innova.inNovagent.util.Point;
 
 public class NodeMap {
 	private Map<Point, Node> field;
+	
+	private int minX;
+	private int maxX;
+	private int minY;
+	private int maxY;
 
 	public NodeMap() {
 		field = new HashMap<>();
+		
+		minX = 0;
+		maxX = 0;
+		minY = 0;
+		maxY = 0;
 	}
 	
 	public Node createOrGet(Point point) {
@@ -39,6 +49,11 @@ public class NodeMap {
 		
 		field.put(res.getPosition(), res);
 		
+		minX = point.getX() < minX ? point.getX() : minX;
+		maxX = point.getX() > maxX ? point.getX() : maxX;
+		minY = point.getY() < minY ? point.getY() : minY;
+		maxY = point.getY() > maxY ? point.getY() : maxY;
+		
 		return res;
 	}
 	
@@ -52,6 +67,22 @@ public class NodeMap {
 	
 	public Node getNode(Point point){
 		return getNode(point.getX(), point.getY());
+	}
+
+	public int getMinX() {
+		return minX;
+	}
+
+	public int getMinY() {
+		return minY;
+	}
+
+	public int getWidth() {
+		return maxX - minX + 1;
+	}
+
+	public int getHeight() {
+		return maxY - minY + 1;
 	}
 
 }

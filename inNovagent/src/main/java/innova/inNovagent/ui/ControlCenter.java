@@ -75,8 +75,6 @@ public class ControlCenter extends JPanel {
 		c.gridwidth = 3;
 		
 		add(this.agentOverviewContainer,c);
-		
-		
 	}
 	
 	private JPanel createAgentControl(String agentName){

@@ -6,7 +6,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		super("VisualisationFrame");
 		
-		add(new MapPainter());
+//		add(new MapPainter());
 
 		pack();
 		setLocationRelativeTo(null);
