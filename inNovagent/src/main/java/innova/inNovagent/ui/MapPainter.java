@@ -9,11 +9,13 @@ import javax.swing.JPanel;
 import innova.inNovagent.agents.SyncMapAgent;
 import innova.inNovagent.core.Node;
 import innova.inNovagent.core.NodeMap;
+import innova.inNovagent.util.Point;
 
 public class MapPainter extends JPanel {
 	private SyncMapAgent mapPainterAgent;
 
 	private static Color BACKGROUND_COLOR = new Color(130, 150, 150);
+	private static Color HOME_COLOR = Color.BLUE;
 	private static Color TRAP_COLOR = Color.RED;
 	private static Color STONE_COLOR = Color.BLACK;
 	private static Color VISITED_COLOR = Color.GREEN;
@@ -51,7 +53,9 @@ public class MapPainter extends JPanel {
 	}
 
 	private void paintNode(Node node, int x, int y, NodeMap map, int squareWidth, int squareHeight, Graphics g) {
-		if (node.isTrap()) {
+		if (node.getPosition().equals(new Point(0, 0))) {
+			g.setColor(HOME_COLOR);
+		} else if (node.isTrap()) {
 			g.setColor(TRAP_COLOR);
 		} else if (node.isStone()) {
 			g.setColor(STONE_COLOR);
@@ -60,7 +64,8 @@ public class MapPainter extends JPanel {
 		} else {
 			g.setColor(UNVISITED_COLOR);
 		}
-		g.fillRect((x - map.getMinX()) * squareWidth, getHeight() - (y - map.getMinY()) * squareHeight, squareWidth, squareHeight);
+		g.fillRect((x - map.getMinX()) * squareWidth, getHeight() - (y - map.getMinY()) * squareHeight - squareHeight, squareWidth,
+				squareHeight);
 		paintHoney(node, x, y, map, squareWidth, squareHeight, g);
 	}
 
@@ -70,13 +75,14 @@ public class MapPainter extends JPanel {
 			g.setColor(HONEY_COLOR);
 			int xEdge = squareWidth / 4;
 			int yEdge = squareHeight / 4;
-			g.fillRect((x - map.getMinX()) * squareWidth + xEdge, getHeight() - (y - map.getMinY()) * squareHeight + yEdge,
-					squareWidth - 2 * xEdge, squareHeight - 2 * yEdge);
+			g.fillRect((x - map.getMinX()) * squareWidth + xEdge,
+					getHeight() - (y - map.getMinY()) * squareHeight - squareHeight + yEdge, squareWidth - 2 * xEdge,
+					squareHeight - 2 * yEdge);
 
 			String text = String.valueOf(honeyAmount);
 			int labelX = (int) ((x - map.getMinX()) * squareWidth + squareWidth / 2
 					- g.getFontMetrics().stringWidth(text) / 2);
-			int labelY = (int) (getHeight() - (y - map.getMinY()) * squareHeight + squareHeight / 2
+			int labelY = (int) (getHeight() - (y - map.getMinY()) * squareHeight - squareHeight + squareHeight / 2
 					+ g.getFontMetrics().getHeight() / 4);
 			g.setColor(TEXT_GRID_COLOR);
 			g.drawString(text, labelX, labelY);
