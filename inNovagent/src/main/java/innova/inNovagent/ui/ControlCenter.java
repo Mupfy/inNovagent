@@ -14,47 +14,58 @@ import javax.swing.border.Border;
 import org.apache.log4j.Logger;
 
 import innova.inNovagent.agents.Innovagent;
+import innova.inNovagent.agents.MapPainterAgent;
 import innova.inNovagent.core.AgentLauncher;
 import innova.inNovagent.util.FunStuff;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
 public class ControlCenter extends JPanel {
-	
+
 	private static final Logger LOGGER = Logger.getLogger(ControlCenter.class);
 	private static int agentCounter = 1;
-	
+
 	private JTextField ipInputField;
 	private JPanel agentOverviewContainer;
 	
-	public ControlCenter(){
+	private JButton mapPainterBttn;
+	private JButton launchBttn;
+
+	public ControlCenter() {
 		this.ipInputField = new JTextField("localhost");
 		this.agentOverviewContainer = new JPanel(new GridLayout(0, 1));
 		constructUI();
 	}
-	
-	private void constructUI(){
+
+	private void constructUI() {
 		setLayout(new GridBagLayout());
-		
+
 		// IP overview
 		GridBagConstraints c = new GridBagConstraints();
 		JLabel ipLabel = new JLabel("IP:");
-		JButton applyIpBttn = new JButton("OK");
-		applyIpBttn.addActionListener( e -> AgentLauncher.instance().setIPAdress(this.ipInputField.getText()));
+		JButton applyIpBttn = new JButton("Connect");
+		applyIpBttn.addActionListener(e -> connectToAntWorld());
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
 		add(ipLabel, c);
 		++c.gridx;
 		c.weightx = 1.0;
-		add(ipInputField,c);
+		add(ipInputField, c);
 		c.weightx = 0.0;
 		++c.gridx;
-		add(applyIpBttn,c);
-		
+		add(applyIpBttn, c);
+
+		// MapPainter
+		mapPainterBttn = new JButton("Paint Map");
+		mapPainterBttn.addActionListener(e -> createMapPainterAgent());
+		++c.gridy;
+		mapPainterBttn.setEnabled(false);
+		add(mapPainterBttn, c);
+
 		// Launch Button
-		JButton launchBttn = new JButton("Launch");
-		launchBttn.addActionListener( e -> {
+		launchBttn = new JButton("Launch Agent");
+		launchBttn.addActionListener(e -> {
 			this.agentOverviewContainer.add(createAgentControl(FunStuff.createNameForAgent()));
 			this.agentOverviewContainer.revalidate();
 		});
@@ -62,8 +73,9 @@ public class ControlCenter extends JPanel {
 		c.gridx = 0;
 		c.weightx = 1.0;
 		c.gridwidth = 3;
-		add(launchBttn,c);
-		
+		launchBttn.setEnabled(false);
+		add(launchBttn, c);
+
 		// Agent overview
 		Border border = BorderFactory.createTitledBorder("Agents");
 		this.agentOverviewContainer.setBorder(border);
@@ -73,19 +85,18 @@ public class ControlCenter extends JPanel {
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.gridwidth = 3;
-		
-		add(this.agentOverviewContainer,c);
+
+		add(this.agentOverviewContainer, c);
 	}
-	
-	private JPanel createAgentControl(String agentName){
+
+	private JPanel createAgentControl(String agentName) {
 		final JPanel panel = new JPanel();
 		final JLabel label = new JLabel(agentName);
 		final JButton killBttn = new JButton("X");
-		
-		
+
 		panel.add(label);
 		panel.add(killBttn);
-		
+
 		final AgentController target = AgentLauncher.instance().createAgent(agentName, Innovagent.class);
 		try {
 			target.start();
@@ -95,7 +106,7 @@ public class ControlCenter extends JPanel {
 			errorPanel.add(new JLabel("ERROR"));
 			return errorPanel;
 		}
-		killBttn.addActionListener( e -> {
+		killBttn.addActionListener(e -> {
 			try {
 				target.kill();
 				this.agentOverviewContainer.remove(panel);
@@ -105,5 +116,22 @@ public class ControlCenter extends JPanel {
 			}
 		});
 		return panel;
+	}
+	
+	private void connectToAntWorld() {
+		// not perfect, but prevents an accidental click before clicking "connect"
+		AgentLauncher.instance().setIPAdress(this.ipInputField.getText());
+		mapPainterBttn.setEnabled(true);
+		launchBttn.setEnabled(true);
+	}
+
+	private void createMapPainterAgent() {
+		AgentController target = AgentLauncher.instance().createAgent(MapPainterAgent.class.getName(),
+				MapPainterAgent.class);
+		try {
+			target.start();
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -10,12 +10,9 @@ import org.apache.log4j.FileAppender;
 import org.apache.log4j.PatternLayout;
 import org.json.JSONObject;
 
-import innova.inNovagent.agents.MapPainterAgent;
 import innova.inNovagent.agents.SynchronizedAgent;
-import innova.inNovagent.core.AgentLauncher;
 import innova.inNovagent.ui.ControlCenter;
 import jade.lang.acl.ACLMessage;
-import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
 public final class Main {
@@ -49,20 +46,7 @@ public final class Main {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.add(new ControlCenter());
-		frame.setSize(200, 750);
+		frame.setSize(250, 750);
 		frame.setVisible(true);
-		
-		AgentController target = null;
-		while (target == null) {
-			target = AgentLauncher.instance().createAgent(MapPainterAgent.class.getName(), MapPainterAgent.class);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {}
-		}
-		try {
-			target.start();
-		} catch (StaleProxyException e) {
-			e.printStackTrace();
-		}
 	}
 }
