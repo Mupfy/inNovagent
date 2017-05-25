@@ -9,7 +9,6 @@ public class MainFrame extends JFrame {
 		add(new MapPainter());
 
 		pack();
-//		setResizable(false);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}

@@ -9,16 +9,12 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import javax.swing.plaf.synth.SynthSpinnerUI;
-
 import innova.inNovagent.core.Node;
 import innova.inNovagent.core.NodeMap;
 import innova.inNovagent.util.Point;
 import innova.inNovagent.util.Utils;
 
 public class DijkstraPathfinding implements Pathfinding{
-	
-	
 	
 	private class Data{
 		int distance = Integer.MAX_VALUE;

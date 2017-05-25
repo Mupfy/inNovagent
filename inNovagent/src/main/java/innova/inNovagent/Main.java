@@ -10,15 +10,9 @@ import org.apache.log4j.FileAppender;
 import org.apache.log4j.PatternLayout;
 import org.json.JSONObject;
 
-import innova.inNovagent.agents.Innovagent;
 import innova.inNovagent.agents.SynchronizedAgent;
 import innova.inNovagent.ui.ControlCenter;
-import jade.core.Profile;
-import jade.core.ProfileImpl;
-import jade.core.Runtime;
 import jade.lang.acl.ACLMessage;
-import jade.wrapper.AgentContainer;
-import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
 public final class Main {

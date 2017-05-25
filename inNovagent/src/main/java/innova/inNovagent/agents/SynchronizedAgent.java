@@ -21,9 +21,9 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
 /**
- *  * The base class of all inNovaGent-Agents. The {@link SynchronizedAgent}
- * will automatically seek other {@link SynchronizedAgent} in Jade  * and will
- * include them in his intern known agent list  *  
+ * The base class of all inNovaGent-Agents. The {@link SynchronizedAgent}
+ * will automatically seek other {@link SynchronizedAgent} in Jade and will
+ * include them in his intern known agent list. 
  */
 public abstract class SynchronizedAgent extends Agent {
 

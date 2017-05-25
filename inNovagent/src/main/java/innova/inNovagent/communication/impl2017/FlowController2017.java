@@ -6,16 +6,19 @@ import org.json.JSONObject;
 import innova.inNovagent.communication.AntWorldFlowController;
 import innova.inNovagent.communication.AntWorldMessageTranslator;
 import innova.inNovagent.communication.NodeInformationTO;
-import innova.inNovagent.util.Point;
 import innova.inNovagent.util.Utils;
 
-public class FlowController2017 implements AntWorldFlowController{
-	
+/**
+ * Controls what happens after an action was performed (When an agent died /
+ * moved successfully / ...).
+ */
+public class FlowController2017 implements AntWorldFlowController {
+
 	private static final Logger LOGGER = Logger.getLogger(FlowController2017.class);
-	
+
 	private static final String PICK_ACTION = "ANT_ACTION_PICK";
 	private static final String DROP_ACTION = "ANT_ACTION_DROP";
-	
+
 	private OnDeathCallback deathCallback;
 	private OnMovementCallback movementCallback;
 	private OnFailedMovementCallback failedMovementCallback;
@@ -23,12 +26,12 @@ public class FlowController2017 implements AntWorldFlowController{
 	private PositionAccess positionAccess;
 	private Runnable onPick;
 	private Runnable onDrop;
-	
+
 	/**
-	 * These are the x and y of antworld and not of the internal used coordinates
+	 * These are the x and y of antworld and not of the internal used
+	 * coordinates
 	 */
-	private int x = -1, y = -1; 
-	
+	private int x = -1, y = -1;
 
 	@Override
 	public void setOnDeathCallback(OnDeathCallback callback) {
@@ -49,35 +52,39 @@ public class FlowController2017 implements AntWorldFlowController{
 	public void setMessageTranslator(AntWorldMessageTranslator translator) {
 		this.messageTranslator = Utils.notNull(translator);
 	}
-	
+
 	@Override
 	public void consumeMessage(JSONObject rootNode) {
 		LOGGER.debug("Starting to consume Message");
 		NodeInformationTO data = messageTranslator.translate(rootNode);
-		
-		if(PICK_ACTION.equals(rootNode.getString("action"))){
+
+		if (PICK_ACTION.equals(rootNode.getString("action"))) {
 			this.onPick.run();
 			return;
 		}
-		
-		if(DROP_ACTION.equals(rootNode.getString("action"))){
+
+		if (DROP_ACTION.equals(rootNode.getString("action"))) {
 			this.onDrop.run();
 			return;
 		}
-		
-		if(data.isTrap()){ //Currently order of if-statements is important. If you die you don't have moved to.
+
+		if (data.isTrap()) { // Current order of if-statements is important. If
+								// you die you don't have moved.
 			this.deathCallback.callback();
 			LOGGER.debug("Ending consuming with: death");
 			return;
 		}
-		
-		if(this.x == data.getX() && this.y == data.getY() || data.isStone()){ //TODO Abfrage erweitern verändern, wenn durch zufall die initialwerte und der spawnpunkt auf dem gleichem fleck liegen
+
+		if (this.x == data.getX() && this.y == data.getY() || data.isStone()) { // TODO Abfrage erweitern verändern, wenn durch
+																				// zufall die initialwerte und der spawnpunkt
+																				// auf dem gleichem fleck liegen
 			this.failedMovementCallback.onFailedMovement();
 			LOGGER.debug("Ending consuming with: failedMvnt");
 			return;
 		}
-		
-		LOGGER.debug("MVNT successful: old x " + this.x + " | new x " + data.getX() + " : old y "+this.y + " | new y "+ data.getY());
+
+		LOGGER.debug("MVNT successful: old x " + this.x + " | new x " + data.getX() + " : old y " + this.y + " | new y "
+				+ data.getY());
 		this.x = data.getX();
 		this.y = data.getY();
 		this.movementCallback.onSuccessfulMovement(data);
@@ -93,5 +100,5 @@ public class FlowController2017 implements AntWorldFlowController{
 	public void setOnPickCallback(Runnable callback) {
 		this.onPick = Utils.notNull(callback);
 	}
-	
+
 }

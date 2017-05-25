@@ -1,6 +1,5 @@
 package innova.inNovagent.agents;
 
-import java.awt.Transparency;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,10 +22,12 @@ import innova.inNovagent.core.logic.Pathfinding.Direction;
 import innova.inNovagent.util.Constants;
 import innova.inNovagent.util.Point;
 import innova.inNovagent.util.Utils;
-import jade.core.CaseInsensitiveString;
 import jade.lang.acl.ACLMessage;
 
 //TODO: Kein error-handling verhanden, falls z.B. ein pick kommt und dieser bereits aufgehoben wurde.
+/**
+ * The ant which moves on the field.
+ */
 public class Innovagent extends SyncMapAgent {
 	
 	private interface AgentState{
@@ -143,7 +144,7 @@ public class Innovagent extends SyncMapAgent {
 			carryingFood = false;
 			System.out.println("drop");
 			currentState = new StateScouting(); //TODO konstante
-			tryMoveing();
+			tryMoving();
 		});
 		flowController.setOnPickCallback( () -> {
 			System.out.println("pickup");
@@ -152,7 +153,7 @@ public class Innovagent extends SyncMapAgent {
 			node.setHoneyAmount(node.getHoneyAmount() -1 );
 			shareAntWorldUpdate( Arrays.asList(node));
 			currentState = new StateCarrying(); //TODO konstante
-			tryMoveing();
+			tryMoving();
 		});
 		flowController.setMessageTranslator(TRANSLATOR);
 		this.pathfinding = new DijkstraPathfinding();
@@ -243,10 +244,11 @@ public class Innovagent extends SyncMapAgent {
 			case DOWN: COMMUNICATOR.moveDown(); break;
 			case LEFT: COMMUNICATOR.moveLeft(); break;
 			case RIGHT: COMMUNICATOR.moveRight(); break;
+			default: break;
 		}
 	}
 	
-	private void tryMoveing(){
+	private void tryMoving(){
 		pathfinding.recalculateMap(nodeMap, position);
 		this.targetPosition = currentState.getNextTarget();
 		Utils.consistentAgentLog(LOGGER, agentName, " targeting " + targetPosition);
@@ -263,13 +265,13 @@ public class Innovagent extends SyncMapAgent {
 		if(currentState.skipMovement()){
 			return;
 		}
-		tryMoveing();
+		tryMoving();
 	}
 	
 	private void movementFailed() {
 		basicFailedMovement();
 		Utils.consistentAgentLog(LOGGER, this.agentName, "failed to move to "+this.position+" [STONE|BORDER]");
-		tryMoveing();
+		tryMoving();
 	}
 	
 	private void applyDataToNode(Node node, NodeInformationTO data){

@@ -1,14 +1,11 @@
 package innova.inNovagent.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -22,7 +19,7 @@ import innova.inNovagent.util.FunStuff;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
-public class ControlCenter extends JPanel{
+public class ControlCenter extends JPanel {
 	
 	private static final Logger LOGGER = Logger.getLogger(ControlCenter.class);
 	private static int agentCounter = 1;
@@ -55,9 +52,9 @@ public class ControlCenter extends JPanel{
 		++c.gridx;
 		add(applyIpBttn,c);
 		
-		//Lunch Button
-		JButton lunchBttn = new JButton("Lunch");
-		lunchBttn.addActionListener( e -> {
+		// Launch Button
+		JButton launchBttn = new JButton("Launch");
+		launchBttn.addActionListener( e -> {
 			this.agentOverviewContainer.add(createAgentControl(FunStuff.createNameForAgent()));
 			this.agentOverviewContainer.revalidate();
 		});
@@ -65,7 +62,7 @@ public class ControlCenter extends JPanel{
 		c.gridx = 0;
 		c.weightx = 1.0;
 		c.gridwidth = 3;
-		add(lunchBttn,c);
+		add(launchBttn,c);
 		
 		// Agent overview
 		Border border = BorderFactory.createTitledBorder("Agents");

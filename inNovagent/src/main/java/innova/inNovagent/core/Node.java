@@ -14,7 +14,6 @@ public class Node {
 	private Point position;
 	
 	private Set<Node> neighbours;
-	
 
 	private boolean isStone;
 	private boolean isTrap;

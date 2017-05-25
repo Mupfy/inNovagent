@@ -1,7 +1,6 @@
 package innova.inNovagent.communication.impl2017;
 
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import innova.inNovagent.communication.AntWorldCommunicator;
@@ -15,8 +14,10 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
-
-public class Communicator2017 implements AntWorldCommunicator{
+/**
+ * Sends messages to antWorld2017.
+ */
+public class Communicator2017 implements AntWorldCommunicator {
 	
 	private static final Logger LOGGER  = Logger.getLogger(Communicator2017.class);
 	
