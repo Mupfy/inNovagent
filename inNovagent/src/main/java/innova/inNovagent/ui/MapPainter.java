@@ -11,6 +11,7 @@ import innova.inNovagent.core.Node;
 import innova.inNovagent.core.NodeMap;
 import innova.inNovagent.util.Point;
 
+//TODO: Man kann einen zweiten Map-Painter starten und das führt zum Absturz. Bzw man kann den Map-Painter ncit reseten und alle neuen Agenten bekommen falsche Informationen bei einer neuen Karte
 public class MapPainter extends JPanel {
 	private SyncMapAgent mapPainterAgent;
 
@@ -21,6 +22,7 @@ public class MapPainter extends JPanel {
 	private static Color VISITED_COLOR = Color.GREEN;
 	private static Color UNVISITED_COLOR = Color.WHITE;
 	private static Color HONEY_COLOR = Color.YELLOW;
+	private static Color DANGEROUS_COLOR = Color.ORANGE;
 	private static Color TEXT_GRID_COLOR = Color.BLACK;
 
 	public MapPainter(SyncMapAgent mapPainterAgent) {
@@ -61,7 +63,9 @@ public class MapPainter extends JPanel {
 			g.setColor(STONE_COLOR);
 		} else if (node.isVisited()) {
 			g.setColor(VISITED_COLOR);
-		} else {
+		} else if(node.isDangerous()){
+			g.setColor(DANGEROUS_COLOR);
+		}else{
 			g.setColor(UNVISITED_COLOR);
 		}
 		g.fillRect((x - map.getMinX()) * squareWidth, getHeight() - (y - map.getMinY()) * squareHeight - squareHeight, squareWidth,

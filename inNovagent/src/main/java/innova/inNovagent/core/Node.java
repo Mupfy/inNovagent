@@ -18,6 +18,7 @@ public class Node {
 	private boolean isStone;
 	private boolean isTrap;
 	private boolean isVisited;
+	private boolean isDangerous;
 	private int honeyAmount;
 	private int smell;
 	private int stench;
@@ -124,6 +125,15 @@ public class Node {
 	public Node setStench(int stenchAmount){
 		this.stench = stenchAmount;
 		return this;
+	}
+	
+	public Node setDangerous(boolean value){
+		this.isDangerous = value;
+		return this;
+	}
+	
+	public boolean isDangerous(){
+		return this.isDangerous;
 	}
 	
 }

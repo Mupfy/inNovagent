@@ -19,6 +19,7 @@ import innova.inNovagent.core.Node;
 import innova.inNovagent.core.logic.DijkstraPathfinding;
 import innova.inNovagent.core.logic.Pathfinding;
 import innova.inNovagent.core.logic.Pathfinding.Direction;
+import innova.inNovagent.core.logic.TrapScanner;
 import innova.inNovagent.util.Constants;
 import innova.inNovagent.util.Point;
 import innova.inNovagent.util.Utils;
@@ -60,6 +61,7 @@ public class Innovagent extends SyncMapAgent {
 		}
 		
 		public void reachedNode(Node n){
+			Innovagent.this.scanner.evaluate(getMap());
 			if( !carryingFood && n.hasHoney() ){
 				skip = true;
 				COMMUNICATOR.pickUp();
@@ -128,7 +130,7 @@ public class Innovagent extends SyncMapAgent {
 	private Pathfinding pathfinding;
 	private AgentState currentState;
 	private boolean carryingFood;
-	
+	private TrapScanner scanner;
 	
 	public Innovagent() {
 		
@@ -157,7 +159,8 @@ public class Innovagent extends SyncMapAgent {
 		});
 		flowController.setMessageTranslator(TRANSLATOR);
 		this.pathfinding = new DijkstraPathfinding();
-		this.pathfinding.setNodeFilter( node -> !node.isStone() && !node.isTrap());
+		this.pathfinding.setNodeFilter( node -> !node.isStone() && !node.isTrap() && !node.isDangerous());
+		this.scanner = new TrapScanner();
 		
 	}
 	

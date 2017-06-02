@@ -31,6 +31,7 @@ public class SyncMapAgent extends SynchronizedAgent {
 	private static final String STONE_MARKER = "STONE";
 	private static final String STENCH_AMOUNT = "STENCH_AMOUNT";
 	private static final String VISITED = "VISITED";
+	private static final String DANGEROUS = "DANGEROUS";
 
 	protected NodeMap nodeMap;
 
@@ -92,17 +93,27 @@ public class SyncMapAgent extends SynchronizedAgent {
 		int x = mapNodeObject.getInt(POSITION_X);
 		int y = mapNodeObject.getInt(POSITION_Y);
 
-		return this.nodeMap.createOrGet(new Point(x, y)).setHoneyAmount(mapNodeObject.getInt(HONEY_AMOUNT))
-				.setSmell(mapNodeObject.getInt(SMELL_AMOUNT)).setStone(mapNodeObject.getBoolean(STONE_MARKER))
-				.setTrap(mapNodeObject.getBoolean(TRAP_MARKER)).setStench(mapNodeObject.getInt(STENCH_AMOUNT))
-				.setVisited(mapNodeObject.getBoolean(VISITED));
+		return this.nodeMap.createOrGet(new Point(x, y))
+				.setHoneyAmount(mapNodeObject.getInt(HONEY_AMOUNT))
+				.setSmell(mapNodeObject.getInt(SMELL_AMOUNT))
+				.setStone(mapNodeObject.getBoolean(STONE_MARKER))
+				.setTrap(mapNodeObject.getBoolean(TRAP_MARKER))
+				.setStench(mapNodeObject.getInt(STENCH_AMOUNT))
+				.setVisited(mapNodeObject.getBoolean(VISITED))
+				.setDangerous(mapNodeObject.getBoolean(DANGEROUS));
 	}
 
 	private JSONObject nodeToJSON(Node data) {
-		return new JSONObject().put(POSITION_X, data.getPosition().getX()).put(POSITION_Y, data.getPosition().getY())
-				.put(HONEY_AMOUNT, data.getHoneyAmount()).put(SMELL_AMOUNT, data.getSmell())
-				.put(STONE_MARKER, data.isStone()).put(STENCH_AMOUNT, data.getStench()).put(TRAP_MARKER, data.isTrap())
-				.put(VISITED, data.isVisited());
+		return new JSONObject()
+				.put(POSITION_X, data.getPosition().getX())
+				.put(POSITION_Y, data.getPosition().getY())
+				.put(HONEY_AMOUNT, data.getHoneyAmount())
+				.put(SMELL_AMOUNT, data.getSmell())
+				.put(STONE_MARKER, data.isStone())
+				.put(STENCH_AMOUNT, data.getStench())
+				.put(TRAP_MARKER, data.isTrap())
+				.put(VISITED, data.isVisited())
+				.put(DANGEROUS, data.isDangerous());
 	}
 
 	private JSONArray mapToJSON() {
