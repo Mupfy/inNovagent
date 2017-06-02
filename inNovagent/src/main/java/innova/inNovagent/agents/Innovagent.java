@@ -42,6 +42,9 @@ public class Innovagent extends SyncMapAgent {
 		private boolean skip;
 		
 		public Point getNextTarget(){
+			Innovagent.this.pathfinding.setNodeFilter( node -> !node.isStone() && !node.isTrap() && !node.isDangerous());
+			pathfinding.recalculateMap(getMap(), position);
+			
 			List<Node> foodNodes = pathfinding.getNearest(Node::hasHoney);
 			if(!foodNodes.isEmpty()){
 				Utils.consistentAgentLog(LOGGER, agentName, "food found. Go to nearest one");
@@ -55,13 +58,22 @@ public class Innovagent extends SyncMapAgent {
 				int index = (int)(Math.random() * unknownNodes.size());
 				return unknownNodes.get(index).getPosition();
 			}
+
+			Innovagent.this.pathfinding.setNodeFilter( node -> !node.isStone() && !node.isTrap());
+			pathfinding.recalculateMap(getMap(), position);
+			List<Node> dangerousFields = pathfinding.getNearest( node -> !node.isVisited());
+			if(!dangerousFields.isEmpty()){
+				Utils.consistentAgentLog(LOGGER, agentName, " no safe fields found. Go to nearest unsafe");
+				int index = (int)(Math.random() * dangerousFields.size());
+				return dangerousFields.get(index).getPosition();
+			}
+			
 			
 			Utils.consistentAgentLog(LOGGER, agentName, " no food and unknwon found. Go to start");
 			return START_POSITION;
 		}
 		
 		public void reachedNode(Node n){
-			Innovagent.this.scanner.evaluate(getMap());
 			if( !carryingFood && n.hasHoney() ){
 				skip = true;
 				COMMUNICATOR.pickUp();
@@ -222,6 +234,8 @@ public class Innovagent extends SyncMapAgent {
 		node.setStone(true);
 		node.setVisited(true);
 		this.position = lastPosition;
+		
+		this.scanner.evaluate(getMap());
 		shareAntWorldUpdate(Arrays.asList(node));
 		return node;
 	}
@@ -235,6 +249,8 @@ public class Innovagent extends SyncMapAgent {
 			expandNode(node);
 			Collection<Node> nodes = new ArrayList<>(node.getNeighbours());
 			nodes.add(node);
+			
+			this.scanner.evaluate(getMap());
 			shareAntWorldUpdate(nodes);
 		}
 		return node;

@@ -135,5 +135,4 @@ public class Node {
 	public boolean isDangerous(){
 		return this.isDangerous;
 	}
-	
 }

@@ -61,10 +61,10 @@ public class MapPainter extends JPanel {
 			g.setColor(TRAP_COLOR);
 		} else if (node.isStone()) {
 			g.setColor(STONE_COLOR);
-		} else if (node.isVisited()) {
-			g.setColor(VISITED_COLOR);
 		} else if(node.isDangerous()){
 			g.setColor(DANGEROUS_COLOR);
+		} else if (node.isVisited()) {
+			g.setColor(VISITED_COLOR);
 		}else{
 			g.setColor(UNVISITED_COLOR);
 		}

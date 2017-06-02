@@ -92,16 +92,21 @@ public class SyncMapAgent extends SynchronizedAgent {
 	private Node parseMapInformation(JSONObject mapNodeObject) {
 		int x = mapNodeObject.getInt(POSITION_X);
 		int y = mapNodeObject.getInt(POSITION_Y);
-
-		return this.nodeMap.createOrGet(new Point(x, y))
-				.setHoneyAmount(mapNodeObject.getInt(HONEY_AMOUNT))
-				.setSmell(mapNodeObject.getInt(SMELL_AMOUNT))
-				.setStone(mapNodeObject.getBoolean(STONE_MARKER))
-				.setTrap(mapNodeObject.getBoolean(TRAP_MARKER))
-				.setStench(mapNodeObject.getInt(STENCH_AMOUNT))
-				.setVisited(mapNodeObject.getBoolean(VISITED))
-				.setDangerous(mapNodeObject.getBoolean(DANGEROUS));
-	}
+		
+		Node n = this.nodeMap.createOrGet(new Point(x, y));
+		n.setHoneyAmount(mapNodeObject.getInt(HONEY_AMOUNT))
+		.setSmell(mapNodeObject.getInt(SMELL_AMOUNT));
+		if(n.isVisited()){
+			return n;
+		}
+		n.setStone(mapNodeObject.getBoolean(STONE_MARKER))
+		.setTrap(mapNodeObject.getBoolean(TRAP_MARKER))
+		.setStench(mapNodeObject.getInt(STENCH_AMOUNT))
+		.setVisited(mapNodeObject.getBoolean(VISITED))
+		.setDangerous(mapNodeObject.getBoolean(DANGEROUS));
+		return n;
+}
+		
 
 	private JSONObject nodeToJSON(Node data) {
 		return new JSONObject()

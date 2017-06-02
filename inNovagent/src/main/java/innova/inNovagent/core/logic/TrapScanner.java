@@ -15,8 +15,11 @@ public class TrapScanner {
 	private void markDangerous(NodeMap map){
 		Collection<Node> nodes = map.getField().values();
 		for(Node n : nodes){
-			if(hasNeighbourStench(n) && !n.isVisited()){
+			if(hasNeighbourStench(n) && !n.isVisited() && !n.isStone()){
 				n.setDangerous(true);
+			}
+			if(!n.isTrap() && (n.isVisited() || n.isStone())){
+				n.setDangerous(false);
 			}
 		}
 	}
@@ -29,4 +32,13 @@ public class TrapScanner {
 		}
 		return false;
 	}
+	
+//	private void clearDangours(){
+//		Collection<Node> nodes = map.getField().values();
+//		for(Node n : nodes){
+//			if(n.isVisited()){
+//				
+//			}
+//		}
+//	}
 }
