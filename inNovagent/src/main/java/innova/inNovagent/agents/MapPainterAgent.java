@@ -1,11 +1,14 @@
 package innova.inNovagent.agents;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.json.JSONObject;
 
 import innova.inNovagent.ui.MapPainter;
+import innova.inNovagent.ui.NodeInformationPanel;
 import jade.lang.acl.ACLMessage;
 
 
@@ -17,9 +20,13 @@ public class MapPainterAgent extends SyncMapAgent {
 			@Override
 			public void run() {
 				frame = new JFrame("Agenten");
-				frame.add(new MapPainter(MapPainterAgent.this));
+				frame.setLayout(new BorderLayout());
+				NodeInformationPanel nodeInformationPanel = new NodeInformationPanel();
+				frame.add(nodeInformationPanel, BorderLayout.SOUTH);
+				frame.add(new MapPainter(MapPainterAgent.this, nodeInformationPanel), BorderLayout.NORTH);
 				frame.pack();
 				frame.setLocationRelativeTo(null);
+				frame.pack();
 				frame.setVisible(true);
 				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
