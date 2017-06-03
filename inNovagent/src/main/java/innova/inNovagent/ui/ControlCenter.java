@@ -27,8 +27,11 @@ public class ControlCenter extends JPanel {
 
 	private JTextField ipInputField;
 	private JPanel agentOverviewContainer;
+
+	AgentController mapPainterController;
 	
 	private JButton mapPainterBttn;
+	private JButton mapResetBttn;
 	private JButton launchBttn;
 
 	public ControlCenter() {
@@ -59,9 +62,17 @@ public class ControlCenter extends JPanel {
 		// MapPainter
 		mapPainterBttn = new JButton("Paint Map");
 		mapPainterBttn.addActionListener(e -> createMapPainterAgent());
+		c.gridx = 0;
 		++c.gridy;
 		mapPainterBttn.setEnabled(false);
 		add(mapPainterBttn, c);
+		
+
+		mapResetBttn = new JButton("Reset Map");
+		mapResetBttn.addActionListener(e -> resetMapPainter());
+		++c.gridx;
+		mapResetBttn.setEnabled(false);
+		add(mapResetBttn, c);
 
 		// Launch Button
 		launchBttn = new JButton("Launch Agent");
@@ -126,12 +137,26 @@ public class ControlCenter extends JPanel {
 	}
 
 	private void createMapPainterAgent() {
-		AgentController target = AgentLauncher.instance().createAgent(MapPainterAgent.class.getName(),
+		mapPainterBttn.setEnabled(false);
+		mapResetBttn.setEnabled(true);
+		mapPainterController = AgentLauncher.instance().createAgent(MapPainterAgent.class.getName(),
 				MapPainterAgent.class);
 		try {
-			target.start();
+			mapPainterController.start();
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void resetMapPainter() {
+		mapPainterBttn.setEnabled(true);
+		if (mapPainterController != null) {
+			try {
+				mapPainterController.kill();
+				mapPainterController = null;
+			} catch (StaleProxyException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
