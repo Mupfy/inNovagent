@@ -19,6 +19,7 @@ public class Node {
 	private boolean isTrap;
 	private boolean isVisited;
 	private boolean isDangerous;
+	private boolean isSafe;
 	private int honeyAmount;
 	private int smell;
 	private int stench;
@@ -134,5 +135,14 @@ public class Node {
 	
 	public boolean isDangerous(){
 		return this.isDangerous;
+	}
+	
+	public boolean isSafe(){
+		return this.isSafe;
+	}
+	
+	public Node setSafe(boolean safe){
+		this.isSafe = safe;
+		return this;
 	}
 }

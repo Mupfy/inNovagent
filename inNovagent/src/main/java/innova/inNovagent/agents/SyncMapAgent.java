@@ -32,6 +32,7 @@ public class SyncMapAgent extends SynchronizedAgent {
 	private static final String STENCH_AMOUNT = "STENCH_AMOUNT";
 	private static final String VISITED = "VISITED";
 	private static final String DANGEROUS = "DANGEROUS";
+	private static final String SAFE = "SAFE";
 
 	protected NodeMap nodeMap;
 
@@ -103,7 +104,8 @@ public class SyncMapAgent extends SynchronizedAgent {
 		.setTrap(mapNodeObject.getBoolean(TRAP_MARKER))
 		.setStench(mapNodeObject.getInt(STENCH_AMOUNT))
 		.setVisited(mapNodeObject.getBoolean(VISITED))
-		.setDangerous(mapNodeObject.getBoolean(DANGEROUS));
+		.setDangerous(mapNodeObject.getBoolean(DANGEROUS))
+		.setSafe(mapNodeObject.getBoolean(SAFE));
 		return n;
 }
 		
@@ -118,7 +120,8 @@ public class SyncMapAgent extends SynchronizedAgent {
 				.put(STENCH_AMOUNT, data.getStench())
 				.put(TRAP_MARKER, data.isTrap())
 				.put(VISITED, data.isVisited())
-				.put(DANGEROUS, data.isDangerous());
+				.put(DANGEROUS, data.isDangerous())
+				.put(SAFE, data.isSafe());
 	}
 
 	private JSONArray mapToJSON() {

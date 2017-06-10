@@ -7,6 +7,7 @@ import javax.swing.SwingUtilities;
 
 import org.json.JSONObject;
 
+import innova.inNovagent.core.logic.TrapScanner;
 import innova.inNovagent.ui.MapPainter;
 import innova.inNovagent.ui.NodeInformationPanel;
 import jade.lang.acl.ACLMessage;
@@ -14,8 +15,10 @@ import jade.lang.acl.ACLMessage;
 
 public class MapPainterAgent extends SyncMapAgent {
 	private JFrame frame;
+	private TrapScanner scanner;
 	
 	public MapPainterAgent() {
+		this.scanner = new TrapScanner();
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -42,6 +45,7 @@ public class MapPainterAgent extends SyncMapAgent {
 	@Override
 	protected void receiveDispatchedMessage(ACLMessage msg, JSONObject rootNode) {
 		super.receiveDispatchedMessage(msg, rootNode);
+		this.scanner.evaluate(getMap());
 		frame.repaint();
 	}
 	

@@ -23,8 +23,8 @@ public final class Main {
 
 		@Override
 		public void onSync() {
-			System.out.println("Guten Tag ich kenne meine Freunde " + getLocalName());
-			System.out.println(getKnownAgents());
+			
+			
 		}
 
 		@Override

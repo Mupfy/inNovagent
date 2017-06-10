@@ -59,7 +59,7 @@ public abstract class SynchronizedAgent extends Agent {
 	@Override
 	protected void setup() {
 		super.setup();
-		System.out.println("SETUP METHODE CALLED");
+		
 		initMessageConsumer();
 		DFAgentDescription[] serviceDescription = findService();
 
@@ -146,7 +146,7 @@ public abstract class SynchronizedAgent extends Agent {
 		} else {
 			LOGGER.error("Got unknown msg lang with " + msg.getLanguage() + "with msg: " + msg);
 		}
-		System.out.println("------ Message verteilt like a Postbote -------");
+		
 	}
 
 	private void parseInformation(ACLMessage orginalMessage, JSONObject aclMessageContent) {
@@ -160,7 +160,7 @@ public abstract class SynchronizedAgent extends Agent {
 		if(NEW_AGENT_TAG.equals(type) ){
 			this.knowAgents.add(new AID(content.getString(AGENT_ID),true) );
 			notifyObserver("NEW_AGENT", content.getString(AGENT_ID));
-			System.out.println("Nachricht empfangen" + getLocalName());
+			
 		}else if(REMOVE_AGENT_TAG.equals(type) ){
 			this.knowAgents.remove(new AID(content.getString(AGENT_ID),true) );
 			

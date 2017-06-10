@@ -58,7 +58,7 @@ public class Innovagent extends SyncMapAgent {
 				int index = (int)(Math.random() * unknownNodes.size());
 				return unknownNodes.get(index).getPosition();
 			}
-
+			
 			Innovagent.this.pathfinding.setNodeFilter( node -> !node.isStone() && !node.isTrap());
 			pathfinding.recalculateMap(getMap(), position);
 			List<Node> dangerousFields = pathfinding.getNearest( node -> !node.isVisited());
@@ -80,7 +80,7 @@ public class Innovagent extends SyncMapAgent {
 				return;
 			}
 			skip = false;
-			System.out.println("NOT SKIPPING MVNT");
+			
 		}
 		
 		public boolean skipMovement(){
@@ -97,10 +97,10 @@ public class Innovagent extends SyncMapAgent {
 		}
 		
 		public void reachedNode(Node n){
-			System.out.println("carrying: " + carryingFood);
-			System.out.println("pos: " + n);
+			
+			
 			if(carryingFood && START_POSITION.equals(n.getPosition())){
-				System.out.println("dropping");
+				
 				COMMUNICATOR.drop();
 				skip = true;
 				return;
@@ -156,12 +156,12 @@ public class Innovagent extends SyncMapAgent {
 		flowController.setOnFailedMovement( this::movementFailed);
 		flowController.setOnDropCallback( () -> {
 			carryingFood = false;
-			System.out.println("drop");
+			
 			currentState = new StateScouting(); //TODO konstante
 			tryMoving();
 		});
 		flowController.setOnPickCallback( () -> {
-			System.out.println("pickup");
+			
 			carryingFood = true;
 			Node node = nodeMap.getNode(position);
 			node.setHoneyAmount(node.getHoneyAmount() -1 );
@@ -225,6 +225,7 @@ public class Innovagent extends SyncMapAgent {
 			if(neighbour == null){
 				neighbour = getMap().createOrGet(p);
 				neighbour.setVisited(false);
+				neighbour.setSafe( !source.hasStench());
 			}
 		}
 	}
@@ -257,7 +258,7 @@ public class Innovagent extends SyncMapAgent {
 	}
 	
 	private void moveToDirection(Direction d){
-		System.out.println("move Direction: " + d);
+		
 		switch(d){
 			case UP: COMMUNICATOR.moveUp(); break;
 			case DOWN: COMMUNICATOR.moveDown(); break;
