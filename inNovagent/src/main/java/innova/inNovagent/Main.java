@@ -48,6 +48,7 @@ public final class Main {
 		frame.add(new ControlCenter());
 //		frame.setSize(250, 750);
 		frame.pack();
+//		frame.setMinimumSize(frame.getSize());
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
