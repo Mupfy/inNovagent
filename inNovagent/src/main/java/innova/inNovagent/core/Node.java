@@ -50,7 +50,7 @@ public class Node {
 	}
 	
 	public boolean hasHoney() {
-		return this.honeyAmount != 0;
+		return this.honeyAmount > 0;
 	}
 
 	public int getHoneyAmount() {
