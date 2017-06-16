@@ -6,8 +6,10 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
@@ -26,6 +28,7 @@ public class ControlCenter extends JPanel {
 	private static int agentCounter = 1;
 
 	private JTextField ipInputField;
+	private JSpinner agentNumber;
 	private JPanel agentOverviewContainer;
 
 	AgentController mapPainterController;
@@ -71,21 +74,30 @@ public class ControlCenter extends JPanel {
 		mapResetBttn = new JButton("Reset Map");
 		mapResetBttn.addActionListener(e -> resetMapPainter());
 		++c.gridx;
+		c.gridwidth = 2;
 		mapResetBttn.setEnabled(false);
 		add(mapResetBttn, c);
 
 		// Launch Button
 		launchBttn = new JButton("Launch Agent");
 		launchBttn.addActionListener(e -> {
-			this.agentOverviewContainer.add(createAgentControl(FunStuff.createNameForAgent()));
+			for (int i = 0; i < (int) agentNumber.getValue(); ++i) {
+				this.agentOverviewContainer.add(createAgentControl(FunStuff.createNameForAgent()));
+			}
 			this.agentOverviewContainer.revalidate();
 		});
 		++c.gridy;
 		c.gridx = 0;
 		c.weightx = 1.0;
-		c.gridwidth = 3;
+		c.gridwidth = 1;
 		launchBttn.setEnabled(false);
 		add(launchBttn, c);
+		
+		++c.gridx;
+		agentNumber = new JSpinner();
+		agentNumber.setValue(1);
+		c.gridwidth = 1;
+		add(agentNumber, c);
 
 		// Agent overview
 		Border border = BorderFactory.createTitledBorder("Agents");
@@ -122,6 +134,7 @@ public class ControlCenter extends JPanel {
 				target.kill();
 				this.agentOverviewContainer.remove(panel);
 				this.agentOverviewContainer.revalidate();
+				this.agentOverviewContainer.repaint();
 			} catch (StaleProxyException e1) {
 				LOGGER.error(e1);
 			}
