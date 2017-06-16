@@ -2,14 +2,13 @@ package innova.inNovagent.ui;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,32 +26,33 @@ import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
 public class ControlCenter extends JPanel {
-
 	private static final Logger LOGGER = Logger.getLogger(ControlCenter.class);
-	private static int agentCounter = 1;
 
 	private JTextField ipInputField;
 	private JSpinner agentNumber;
 	private JPanel agentOverviewContainer;
 
 	AgentController mapPainterController;
-	
+
 	private JButton mapPainterBttn;
 	private JButton mapResetBttn;
 	private JButton launchBttn;
 
+	private List<AgentController> workingAgents;
+
 	public ControlCenter() {
 		this.ipInputField = new JTextField("localhost", 10);
 		this.agentOverviewContainer = new JPanel(new GridLayout(0, 1));
+		workingAgents = new ArrayList<>();
 		constructUI();
 	}
 
 	private void constructUI() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
+
 		JPanel userInputPanel = new JPanel();
 		userInputPanel.setLayout(new BoxLayout(userInputPanel, BoxLayout.Y_AXIS));
-		
+
 		JPanel ipPanel = new JPanel();
 		JLabel ipLabel = new JLabel("IP:");
 		ipPanel.add(ipLabel);
@@ -61,7 +61,7 @@ public class ControlCenter extends JPanel {
 		applyIpBttn.addActionListener(e -> connectToAntWorld());
 		ipPanel.add(applyIpBttn);
 		userInputPanel.add(ipPanel);
-		
+
 		JPanel mapPainterPanel = new JPanel();
 		mapPainterBttn = new JButton("Paint Map");
 		mapPainterBttn.addActionListener(e -> createMapPainterAgent());
@@ -72,15 +72,15 @@ public class ControlCenter extends JPanel {
 		mapResetBttn.setEnabled(false);
 		mapPainterPanel.add(mapResetBttn);
 		userInputPanel.add(mapPainterPanel);
-		
-		
+
 		JPanel launchPanel = new JPanel();
 		launchBttn = new JButton("Launch Agent(s)");
 		launchBttn.addActionListener(e -> {
 			for (int i = 0; i < (int) agentNumber.getValue(); ++i) {
-				this.agentOverviewContainer.add(createAgentControl(FunStuff.createNameForAgent()));
+				agentOverviewContainer.add(createAgentControl(FunStuff.createNameForAgent()));
 			}
-			this.agentOverviewContainer.revalidate();
+			agentNumber.setValue(1);
+			agentOverviewContainer.revalidate();
 		});
 		launchBttn.setEnabled(false);
 		launchPanel.add(launchBttn);
@@ -90,15 +90,29 @@ public class ControlCenter extends JPanel {
 		JFormattedTextField jftf = ((JSpinner.DefaultEditor) mySpinnerEditor).getTextField();
 		jftf.setColumns(2);
 		launchPanel.add(agentNumber);
+		JButton killAllButton = new JButton("Kill all");
+		killAllButton.addActionListener(e -> {
+			for (AgentController agentController : workingAgents) {
+				try {
+					agentController.kill();
+				} catch (StaleProxyException e1) {
+					LOGGER.error(e1);
+				}
+			}
+			workingAgents = new ArrayList<>();
+			agentOverviewContainer.removeAll();
+			agentOverviewContainer.repaint();
+		});
+		launchPanel.add(killAllButton);
 		userInputPanel.add(launchPanel);
-		
+
 		add(userInputPanel);
-		
+
 		Border border = BorderFactory.createTitledBorder("Agents");
-		this.agentOverviewContainer.setBorder(border);
+		agentOverviewContainer.setBorder(border);
 		System.out.println(getPreferredSize());
-		agentOverviewContainer.setPreferredSize(new Dimension(getPreferredSize().width, 1000));
-		add(this.agentOverviewContainer);
+		agentOverviewContainer.setPreferredSize(new Dimension(getPreferredSize().width, 600));
+		add(agentOverviewContainer);
 	}
 
 	private JPanel createAgentControl(String agentName) {
@@ -118,8 +132,10 @@ public class ControlCenter extends JPanel {
 			errorPanel.add(new JLabel("ERROR"));
 			return errorPanel;
 		}
+		workingAgents.add(target);
 		killBttn.addActionListener(e -> {
 			try {
+				workingAgents.remove(target);
 				target.kill();
 				this.agentOverviewContainer.remove(panel);
 				this.agentOverviewContainer.revalidate();
@@ -130,7 +146,7 @@ public class ControlCenter extends JPanel {
 		});
 		return panel;
 	}
-	
+
 	private void connectToAntWorld() {
 		// not perfect, but prevents an accidental click before clicking "connect"
 		AgentLauncher.instance().setIPAdress(this.ipInputField.getText());
@@ -149,7 +165,7 @@ public class ControlCenter extends JPanel {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void resetMapPainter() {
 		mapPainterBttn.setEnabled(true);
 		if (mapPainterController != null) {

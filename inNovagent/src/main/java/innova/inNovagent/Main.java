@@ -46,7 +46,8 @@ public final class Main {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.add(new ControlCenter());
-		frame.setSize(250, 750);
+//		frame.setSize(250, 750);
+		frame.pack();
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
