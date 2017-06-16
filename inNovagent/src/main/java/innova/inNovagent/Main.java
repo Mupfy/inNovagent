@@ -42,7 +42,7 @@ public final class Main {
 			e1.printStackTrace();
 		}
 		
-		JFrame frame = new JFrame();
+		JFrame frame = new JFrame("Agenten");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.add(new ControlCenter());

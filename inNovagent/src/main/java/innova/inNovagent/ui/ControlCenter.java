@@ -1,12 +1,16 @@
 package innova.inNovagent.ui;
 
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -38,78 +42,63 @@ public class ControlCenter extends JPanel {
 	private JButton launchBttn;
 
 	public ControlCenter() {
-		this.ipInputField = new JTextField("localhost");
+		this.ipInputField = new JTextField("localhost", 10);
 		this.agentOverviewContainer = new JPanel(new GridLayout(0, 1));
 		constructUI();
 	}
 
 	private void constructUI() {
-		setLayout(new GridBagLayout());
-
-		// IP overview
-		GridBagConstraints c = new GridBagConstraints();
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		JPanel userInputPanel = new JPanel();
+		userInputPanel.setLayout(new BoxLayout(userInputPanel, BoxLayout.Y_AXIS));
+		
+		JPanel ipPanel = new JPanel();
 		JLabel ipLabel = new JLabel("IP:");
+		ipPanel.add(ipLabel);
+		ipPanel.add(ipInputField);
 		JButton applyIpBttn = new JButton("Connect");
 		applyIpBttn.addActionListener(e -> connectToAntWorld());
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(ipLabel, c);
-		++c.gridx;
-		c.weightx = 1.0;
-		add(ipInputField, c);
-		c.weightx = 0.0;
-		++c.gridx;
-		add(applyIpBttn, c);
-
-		// MapPainter
+		ipPanel.add(applyIpBttn);
+		userInputPanel.add(ipPanel);
+		
+		JPanel mapPainterPanel = new JPanel();
 		mapPainterBttn = new JButton("Paint Map");
 		mapPainterBttn.addActionListener(e -> createMapPainterAgent());
-		c.gridx = 0;
-		++c.gridy;
 		mapPainterBttn.setEnabled(false);
-		add(mapPainterBttn, c);
-		
-
+		mapPainterPanel.add(mapPainterBttn);
 		mapResetBttn = new JButton("Reset Map");
 		mapResetBttn.addActionListener(e -> resetMapPainter());
-		++c.gridx;
-		c.gridwidth = 2;
 		mapResetBttn.setEnabled(false);
-		add(mapResetBttn, c);
-
-		// Launch Button
-		launchBttn = new JButton("Launch Agent");
+		mapPainterPanel.add(mapResetBttn);
+		userInputPanel.add(mapPainterPanel);
+		
+		
+		JPanel launchPanel = new JPanel();
+		launchBttn = new JButton("Launch Agent(s)");
 		launchBttn.addActionListener(e -> {
 			for (int i = 0; i < (int) agentNumber.getValue(); ++i) {
 				this.agentOverviewContainer.add(createAgentControl(FunStuff.createNameForAgent()));
 			}
 			this.agentOverviewContainer.revalidate();
 		});
-		++c.gridy;
-		c.gridx = 0;
-		c.weightx = 1.0;
-		c.gridwidth = 1;
 		launchBttn.setEnabled(false);
-		add(launchBttn, c);
-		
-		++c.gridx;
+		launchPanel.add(launchBttn);
 		agentNumber = new JSpinner();
 		agentNumber.setValue(1);
-		c.gridwidth = 1;
-		add(agentNumber, c);
-
-		// Agent overview
+		Component mySpinnerEditor = agentNumber.getEditor();
+		JFormattedTextField jftf = ((JSpinner.DefaultEditor) mySpinnerEditor).getTextField();
+		jftf.setColumns(2);
+		launchPanel.add(agentNumber);
+		userInputPanel.add(launchPanel);
+		
+		add(userInputPanel);
+		
 		Border border = BorderFactory.createTitledBorder("Agents");
 		this.agentOverviewContainer.setBorder(border);
-		c.fill = GridBagConstraints.BOTH;
-		++c.gridy;
-		c.gridx = 0;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		c.gridwidth = 3;
-
-		add(this.agentOverviewContainer, c);
+		System.out.println(getPreferredSize());
+		agentOverviewContainer.setPreferredSize(new Dimension(getPreferredSize().width, 1000));
+		add(this.agentOverviewContainer);
 	}
 
 	private JPanel createAgentControl(String agentName) {
