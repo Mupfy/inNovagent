@@ -1,6 +1,7 @@
 package innova.inNovagent;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -48,7 +49,7 @@ public final class Main {
 		frame.add(new ControlCenter());
 //		frame.setSize(250, 750);
 		frame.pack();
-//		frame.setMinimumSize(frame.getSize());
+		frame.setMinimumSize(new Dimension(frame.getSize().width, (int)frame.getSize().getHeight() / 2));
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}

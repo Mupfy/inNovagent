@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JPanel;
 
@@ -33,20 +33,14 @@ public class MapPainter extends JPanel {
 	public MapPainter(SyncMapAgent mapPainterAgent, NodeInformationPanel nodeInformationPanel) {
 		this.mapPainterAgent = mapPainterAgent;
 		
-		addMouseMotionListener(new MouseMotionListener() {
-			
+		addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				nodeInformationPanel.updateNodeInformation(getNodeUnderMouse(e));
 			}
-			
-			@Override
-			public void mouseDragged(MouseEvent e) {
-			}
 		});
 
 		setPreferredSize(new Dimension(800, 800));
-//		setSize(new Dimension(800, 800));
 	}
 	
 	private Node getNodeUnderMouse(MouseEvent e) {
@@ -62,6 +56,7 @@ public class MapPainter extends JPanel {
 
 		map = mapPainterAgent.getMap();
 		squareWidth = getWidth() / map.getWidth();
+		// TODO height does not get updated
 		squareHeight = getHeight() / map.getHeight();
 		paintSquares(g);
 		paintGrid(g);
