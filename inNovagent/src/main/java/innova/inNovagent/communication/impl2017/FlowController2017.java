@@ -23,7 +23,7 @@ public class FlowController2017 implements AntWorldFlowController {
 	private OnMovementCallback movementCallback;
 	private OnFailedMovementCallback failedMovementCallback;
 	private AntWorldMessageTranslator messageTranslator;
-	private PositionAccess positionAccess;
+//	private PositionAccess positionAccess;
 	private Runnable onPick;
 	private Runnable onDrop;
 
@@ -78,6 +78,7 @@ public class FlowController2017 implements AntWorldFlowController {
 		if (this.x == data.getX() && this.y == data.getY() || data.isStone()) { // TODO Abfrage erweitern verändern, wenn durch
 																				// zufall die initialwerte und der spawnpunkt
 																				// auf dem gleichem fleck liegen
+																				// TODO Ist die abfrage nach "isStone" ausreichend?
 			this.failedMovementCallback.onFailedMovement();
 			LOGGER.debug("Ending consuming with: failedMvnt");
 			return;

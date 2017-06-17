@@ -31,7 +31,7 @@ public class ControlCenter extends JPanel {
 	private static final Logger LOGGER = Logger.getLogger(ControlCenter.class);
 
 	private JTextField ipInputField;
-	private JSpinner agentNumber;
+	private JSpinner startAgentsNumber;
 	private JPanel agentOverviewContainer;
 
 	AgentController mapPainterController;
@@ -85,23 +85,23 @@ public class ControlCenter extends JPanel {
 		JPanel launchPanel = new JPanel();
 		launchBttn = new JButton("Launch Agent(s)");
 		launchBttn.addActionListener(e -> {
-			if ((int) agentNumber.getValue() > 0) {
+			if ((int) startAgentsNumber.getValue() > 0) {
 				killAllBttn.setEnabled(true);
-				for (int i = 0; i < (int) agentNumber.getValue(); ++i) {
+				for (int i = 0; i < (int) startAgentsNumber.getValue(); ++i) {
 					agentOverviewContainer.add(createAgentControl(FunStuff.createNameForAgent()));
 				}
-				agentNumber.setValue(1);
+				startAgentsNumber.setValue(1);
 				agentOverviewContainer.revalidate();
 			}
 		});
 		launchBttn.setEnabled(false);
 		launchPanel.add(launchBttn);
-		agentNumber = new JSpinner();
-		agentNumber.setValue(1);
-		Component mySpinnerEditor = agentNumber.getEditor();
+		startAgentsNumber = new JSpinner();
+		startAgentsNumber.setValue(1);
+		Component mySpinnerEditor = startAgentsNumber.getEditor();
 		JFormattedTextField jftf = ((JSpinner.DefaultEditor) mySpinnerEditor).getTextField();
 		jftf.setColumns(2);
-		launchPanel.add(agentNumber);
+		launchPanel.add(startAgentsNumber);
 		killAllBttn = new JButton("Kill all");
 		killAllBttn.setEnabled(false);
 		killAllBttn.addActionListener(e -> {

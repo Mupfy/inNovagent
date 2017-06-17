@@ -61,7 +61,7 @@ public class TrapScanner {
 						if(n.isDangerous() && !n.isTrap()){ 
 							n.setDangerous(false); //The Node is still unvisited and could be marked as dangerous again. Could make Node have a field safe
 							n.setSafe(true);
-							if(!touchedNodes.contains(n)){ // TODO eric hasst sich
+							if(!touchedNodes.contains(n)){ // TODO eric hasst sich (zu recht)
 								touchedNodes.add(n);
 							}
 						}
