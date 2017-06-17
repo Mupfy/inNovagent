@@ -38,7 +38,6 @@ public class MapPainterAgent extends SyncMapAgent {
 	
 	@Override
 	public void onSync() {
-		// TODO does not work yet, if you start a new MapPainterAgent after closing the old one, the new one does not know the map
 		super.onSync();
 	}
 	

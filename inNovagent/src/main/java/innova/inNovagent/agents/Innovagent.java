@@ -75,6 +75,8 @@ public class Innovagent extends SyncMapAgent {
 		
 		public void reachedNode(Node n){
 			if( !carryingFood && n.hasHoney() ){
+				// TODO fehler, bei dem der agent manchmal stehenbleibt? was passiert, wenn er nichts aufheben kann? kommt dann trotzdem ein pickupCallback?
+				// oder liefert skipMovement() dann immer true zurück?
 				skip = true;
 				COMMUNICATOR.pickUp();
 				return;
@@ -143,6 +145,11 @@ public class Innovagent extends SyncMapAgent {
 	private AgentState currentState;
 	private boolean carryingFood;
 	private TrapScanner scanner;
+
+	// TODO singleton?
+	private final StateDead 	STATE_DEAD 		= new StateDead();
+	private final StateScouting STATE_SCOUTING 	= new StateScouting();
+	private final StateCarrying STATE_CARRYING 	= new StateCarrying();
 	
 	public Innovagent() {
 		
@@ -150,14 +157,14 @@ public class Innovagent extends SyncMapAgent {
 		{
 			Node data = this.nodeMap.createOrGet(position).setTrap(true);
 			shareAntWorldUpdate(Arrays.asList(data));
-			currentState = new StateDead(); // TODO in konstanten verschieben
+			currentState = STATE_DEAD;
 		});
 		flowController.setOnSuccessfulMovement(this::movementSuccessful);
 		flowController.setOnFailedMovement( this::movementFailed);
 		flowController.setOnDropCallback( () -> {
 			carryingFood = false;
 			
-			currentState = new StateScouting(); //TODO konstante
+			currentState = STATE_SCOUTING;
 			tryMoving();
 		});
 		flowController.setOnPickCallback( () -> {
@@ -166,7 +173,7 @@ public class Innovagent extends SyncMapAgent {
 			Node node = nodeMap.getNode(position);
 			node.setHoneyAmount(node.getHoneyAmount() -1 );
 			shareAntWorldUpdate( Arrays.asList(node));
-			currentState = new StateCarrying(); //TODO konstante
+			currentState = STATE_CARRYING;
 			tryMoving();
 		});
 		flowController.setMessageTranslator(TRANSLATOR);
@@ -264,7 +271,7 @@ public class Innovagent extends SyncMapAgent {
 			case DOWN: COMMUNICATOR.moveDown(); break;
 			case LEFT: COMMUNICATOR.moveLeft(); break;
 			case RIGHT: COMMUNICATOR.moveRight(); break;
-			default: break;
+			default: throw new RuntimeException("Bewegt sicht nicht, sollte es aber!");
 		}
 	}
 	

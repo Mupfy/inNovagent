@@ -13,7 +13,6 @@ import innova.inNovagent.core.Node;
 import innova.inNovagent.core.NodeMap;
 import innova.inNovagent.util.Point;
 
-//TODO: Man kann einen zweiten Map-Painter starten und das führt zum Absturz. Bzw man kann den Map-Painter ncit reseten und alle neuen Agenten bekommen falsche Informationen bei einer neuen Karte
 public class MapPainter extends JPanel {
 	private SyncMapAgent mapPainterAgent;
 	

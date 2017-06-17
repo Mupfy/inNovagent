@@ -6,7 +6,6 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -25,10 +24,10 @@ import jade.wrapper.StaleProxyException;
 public class ControlCenter extends JPanel {
 
 	private static final Logger LOGGER = Logger.getLogger(ControlCenter.class);
-	private static int agentCounter = 1;
+//	private static int agentCounter = 1;
 
 	private JTextField ipInputField;
-	private JSpinner agentNumber;
+	private JSpinner startAgentsNumber;
 	private JPanel agentOverviewContainer;
 
 	AgentController mapPainterController;
@@ -81,7 +80,7 @@ public class ControlCenter extends JPanel {
 		// Launch Button
 		launchBttn = new JButton("Launch Agent");
 		launchBttn.addActionListener(e -> {
-			for (int i = 0; i < (int) agentNumber.getValue(); ++i) {
+			for (int i = 0; i < (int) startAgentsNumber.getValue(); ++i) {
 				this.agentOverviewContainer.add(createAgentControl(FunStuff.createNameForAgent()));
 			}
 			this.agentOverviewContainer.revalidate();
@@ -94,10 +93,10 @@ public class ControlCenter extends JPanel {
 		add(launchBttn, c);
 		
 		++c.gridx;
-		agentNumber = new JSpinner();
-		agentNumber.setValue(1);
+		startAgentsNumber = new JSpinner();
+		startAgentsNumber.setValue(1);
 		c.gridwidth = 1;
-		add(agentNumber, c);
+		add(startAgentsNumber, c);
 
 		// Agent overview
 		Border border = BorderFactory.createTitledBorder("Agents");
