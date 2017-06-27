@@ -33,5 +33,4 @@ public class MessageTranslator2017 implements AntWorldMessageTranslator {
 		data.setY(cellInfo.getInt(POSITION_Y));
 		return data;
 	}
-
 }

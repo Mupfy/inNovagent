@@ -8,7 +8,6 @@ import innova.inNovagent.util.Utils;
 
 /**
  * Representation of a single field in the AntWorld.
- *
  */
 public class Node {
 	private Point position;
@@ -91,8 +90,8 @@ public class Node {
 		return !this.isStone && !this.isTrap;
 	}
 
-	public Node addNeighbour(Node earl){
-		this.neighbours.add(earl);
+	public Node addNeighbour(Node node){
+		this.neighbours.add(node);
 		return this;
 	}
 	
@@ -128,8 +127,8 @@ public class Node {
 		return this;
 	}
 	
-	public Node setDangerous(boolean value){
-		this.isDangerous = value;
+	public Node setDangerous(boolean isDangerous){
+		this.isDangerous = isDangerous;
 		return this;
 	}
 	
@@ -141,8 +140,8 @@ public class Node {
 		return this.isSafe;
 	}
 	
-	public Node setSafe(boolean safe){
-		this.isSafe = safe;
+	public Node setSafe(boolean isSafe){
+		this.isSafe = isSafe;
 		return this;
 	}
 }

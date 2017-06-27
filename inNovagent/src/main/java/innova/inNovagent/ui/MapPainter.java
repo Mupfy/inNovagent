@@ -13,6 +13,10 @@ import innova.inNovagent.core.Node;
 import innova.inNovagent.core.NodeMap;
 import innova.inNovagent.util.Point;
 
+/**
+ * The map-gui. Gets the informations about the map from the MapPainterAgent and
+ * shows all known Nodes and their information.
+ */
 public class MapPainter extends JPanel {
 	private SyncMapAgent mapPainterAgent;
 	
@@ -32,7 +36,7 @@ public class MapPainter extends JPanel {
 
 	public MapPainter(SyncMapAgent mapPainterAgent, NodeInformationPanel nodeInformationPanel) {
 		this.mapPainterAgent = mapPainterAgent;
-		
+
 		addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
@@ -84,17 +88,17 @@ public class MapPainter extends JPanel {
 			g.setColor(DANGEROUS_COLOR);
 		} else if (node.isVisited()) {
 			g.setColor(VISITED_COLOR);
-		}else{
+		} else {
 			g.setColor(UNVISITED_COLOR);
 		}
-		g.fillRect((x - map.getMinX()) * squareWidth, getHeight() - (y - map.getMinY()) * squareHeight - squareHeight, squareWidth,
-				squareHeight);
+		g.fillRect((x - map.getMinX()) * squareWidth, getHeight() - (y - map.getMinY()) * squareHeight - squareHeight,
+				squareWidth, squareHeight);
 		paintHoney(node, x, y, g);
 	}
 
 	private void paintHoney(Node node, int x, int y, Graphics g) {
 		int honeyAmount = node.getHoneyAmount();
-		if (honeyAmount != 0) {
+		if (honeyAmount > 0) {
 			g.setColor(HONEY_COLOR);
 			int xEdge = squareWidth / 4;
 			int yEdge = squareHeight / 4;

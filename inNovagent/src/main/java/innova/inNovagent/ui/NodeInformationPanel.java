@@ -7,6 +7,9 @@ import javax.swing.JPanel;
 
 import innova.inNovagent.core.Node;
 
+/**
+ * A panel that shows detailed information about single Nodes.
+ */
 public class NodeInformationPanel extends JPanel {
 	private JLabel position;
 	private JLabel honey;
@@ -16,7 +19,7 @@ public class NodeInformationPanel extends JPanel {
 	private JLabel trap;
 	private JLabel visited;
 	private JLabel dangerous;
-	
+
 	public NodeInformationPanel() {
 		setLayout(new GridLayout(2, 4));
 		position = new JLabel("Position: ");
@@ -36,7 +39,13 @@ public class NodeInformationPanel extends JPanel {
 		dangerous = new JLabel("isDangerous:");
 		add(dangerous);
 	}
-	
+
+	/**
+	 * Updates the informations to the ones of the given node.
+	 * 
+	 * @param node
+	 *            the node which informations should be displayed
+	 */
 	public void updateNodeInformation(Node node) {
 		if (node != null) {
 			position.setText("Position: " + node.getPosition().getX() + ", " + node.getPosition().getY());

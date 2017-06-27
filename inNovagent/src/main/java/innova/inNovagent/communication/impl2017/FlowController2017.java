@@ -23,7 +23,6 @@ public class FlowController2017 implements AntWorldFlowController {
 	private OnMovementCallback movementCallback;
 	private OnFailedMovementCallback failedMovementCallback;
 	private AntWorldMessageTranslator messageTranslator;
-//	private PositionAccess positionAccess;
 	private Runnable onPick;
 	private Runnable onDrop;
 
@@ -58,6 +57,7 @@ public class FlowController2017 implements AntWorldFlowController {
 		LOGGER.debug("Starting to consume Message");
 		NodeInformationTO data = messageTranslator.translate(rootNode);
 
+		// TODO failed oder nicht? laufen evtl immer zum start zurück, ohne honig zu haben
 		if (PICK_ACTION.equals(rootNode.getString("action"))) {
 			this.onPick.run();
 			return;

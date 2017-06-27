@@ -84,5 +84,4 @@ public class NodeMap {
 	public int getHeight() {
 		return maxY - minY + 1;
 	}
-
 }

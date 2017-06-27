@@ -27,6 +27,11 @@ import innova.inNovagent.util.FunStuff;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
+/**
+ * The panel which gets created at the start of the program. It contains the
+ * elements to connect to antworld, create and reset the map (new frame) and to
+ * create and remove agents.
+ */
 public class ControlCenter extends JPanel {
 	private static final Logger LOGGER = Logger.getLogger(ControlCenter.class);
 
@@ -44,7 +49,6 @@ public class ControlCenter extends JPanel {
 	private List<AgentController> workingAgents;
 
 	public ControlCenter() {
-		this.agentOverviewContainer = new JPanel(new GridLayout(0, 1));
 		workingAgents = new ArrayList<>();
 		constructUI();
 	}
@@ -55,6 +59,21 @@ public class ControlCenter extends JPanel {
 		JPanel userInputPanel = new JPanel();
 		userInputPanel.setLayout(new BoxLayout(userInputPanel, BoxLayout.Y_AXIS));
 
+		createIpPanel(userInputPanel);
+		createMapPainterPanel(userInputPanel);
+		createLaunchPanel(userInputPanel);
+
+		userInputPanel.setMaximumSize(userInputPanel.getPreferredSize());
+		add(userInputPanel);
+
+		this.agentOverviewContainer = new JPanel(new GridLayout(0, 1));
+		Border border = BorderFactory.createTitledBorder("Agents");
+		agentOverviewContainer.setBorder(border);
+		agentOverviewContainer.setPreferredSize(new Dimension(getPreferredSize().width, 600));
+		add(agentOverviewContainer);
+	}
+
+	private void createIpPanel(JPanel userInputPanel) {
 		JPanel ipPanel = new JPanel();
 		JLabel ipLabel = new JLabel("IP:");
 		ipPanel.add(ipLabel);
@@ -70,7 +89,9 @@ public class ControlCenter extends JPanel {
 		applyIpBttn.addActionListener(e -> connectToAntWorld());
 		ipPanel.add(applyIpBttn);
 		userInputPanel.add(ipPanel);
-
+	}
+	
+	private void createMapPainterPanel(JPanel userInputPanel) {
 		JPanel mapPainterPanel = new JPanel();
 		paintMapBttn = new JButton("Paint Map");
 		paintMapBttn.addActionListener(e -> createMapPainterAgent());
@@ -81,7 +102,9 @@ public class ControlCenter extends JPanel {
 		resetMapBttn.setEnabled(false);
 		mapPainterPanel.add(resetMapBttn);
 		userInputPanel.add(mapPainterPanel);
-
+	}
+	
+	private void createLaunchPanel(JPanel userInputPanel) {
 		JPanel launchPanel = new JPanel();
 		launchBttn = new JButton("Launch Agent(s)");
 		launchBttn.addActionListener(e -> {
@@ -119,22 +142,13 @@ public class ControlCenter extends JPanel {
 		});
 		launchPanel.add(killAllBttn);
 		userInputPanel.add(launchPanel);
-		userInputPanel.setMaximumSize(userInputPanel.getPreferredSize());
-
-		add(userInputPanel);
-
-		Border border = BorderFactory.createTitledBorder("Agents");
-		agentOverviewContainer.setBorder(border);
-		agentOverviewContainer.setPreferredSize(new Dimension(getPreferredSize().width, 600));
-		add(agentOverviewContainer);
 	}
 
 	private JPanel createAgentControl(String agentName) {
 		final JPanel panel = new JPanel();
-		final JLabel label = new JLabel(agentName);
-		final JButton killBttn = new JButton("X");
 
-		panel.add(label);
+		panel.add(new JLabel(agentName));
+		final JButton killBttn = new JButton("X");
 		panel.add(killBttn);
 
 		final AgentController target = AgentLauncher.instance().createAgent(agentName, Innovagent.class);
@@ -165,12 +179,15 @@ public class ControlCenter extends JPanel {
 	}
 
 	private void connectToAntWorld() {
-		// not perfect, but prevents an accidental click before clicking "connect"
 		AgentLauncher.instance().setIPAdress(this.ipInputField.getText());
+		// TODO not perfect, but prevents an accidental click before clicking "connect"
 		paintMapBttn.setEnabled(true);
 		launchBttn.setEnabled(true);
 	}
 
+	/**
+	 * Creates a MapPainterAgent and thereby creates the map-gui.
+	 */
 	private void createMapPainterAgent() {
 		paintMapBttn.setEnabled(false);
 		resetMapBttn.setEnabled(true);
@@ -183,6 +200,9 @@ public class ControlCenter extends JPanel {
 		}
 	}
 
+	/**
+	 * Kills the MapPainterAgent and thereby disposes the map-gui.
+	 */
 	private void resetMapPainter() {
 		resetMapBttn.setEnabled(false);
 		paintMapBttn.setEnabled(true);

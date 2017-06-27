@@ -31,7 +31,7 @@ public class TrapScanner {
 	
 	private boolean hasNeighbourStench(Node n){
 		for(Node current : n.getNeighbours()){
-			if(current.hasStench() ){
+			if(current.hasStench()){
 				return true;
 			}
 		}
@@ -59,7 +59,7 @@ public class TrapScanner {
 				if(!current.isStone() && !current.isTrap() && current.isVisited() && current.getStench() - knownTraps(current) == 0){ //All unvisited neighbours must be safe
 					for(Node n: current.getNeighbours() ){
 						if(n.isDangerous() && !n.isTrap()){ 
-							n.setDangerous(false); //The Node is still unvisited and could be marked as dangerous again. Could make Node have a field safe
+							n.setDangerous(false);
 							n.setSafe(true);
 							if(!touchedNodes.contains(n)){ // TODO eric hasst sich (zu recht)
 								touchedNodes.add(n);
@@ -73,8 +73,6 @@ public class TrapScanner {
 				current.setSafe(true);
 				touchedNodes.addAll(current.getNeighbours());
 			}
-			
-			
 		}
 	}
 	
@@ -117,6 +115,7 @@ public class TrapScanner {
 		return res;
 	}
 	
+	// TODO -.-
 	protected void placeholder_name(Node source){
 		Set<Node> touchedNodes = new HashSet<>();
 		Stack<Node> evaluationStack = new Stack<>();

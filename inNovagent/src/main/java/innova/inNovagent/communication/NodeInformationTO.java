@@ -9,7 +9,6 @@ import innova.inNovagent.core.Node;
  *
  */
 public class NodeInformationTO {
-
 	private int x;
 	private int y;
 	private int honey;
@@ -92,7 +91,4 @@ public class NodeInformationTO {
 	public void setVisited(boolean visited) {
 		this.visited = visited;
 	}
-
-	
-
 }
