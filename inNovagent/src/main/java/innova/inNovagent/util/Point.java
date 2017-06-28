@@ -1,5 +1,9 @@
 package innova.inNovagent.util;
 
+/**
+ * Simple coordinates container. 
+ *
+ */
 public class Point {
 	private int x;
 	private int y;

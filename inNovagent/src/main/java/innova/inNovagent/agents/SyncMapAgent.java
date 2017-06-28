@@ -12,9 +12,10 @@ import innova.inNovagent.util.Point;
 import jade.lang.acl.ACLMessage;
 
 /**
- * Innovagent and MapPainterAgend extend from this class. It synchronizes the
- * map between all agents.
+ * An Agent that knows all other agents connected to jade.
+ * It will automatically share all unknown or changed nodes that are added to its map. 
  */
+@SuppressWarnings("serial")
 public class SyncMapAgent extends SynchronizedAgent {
 
 	public static final String MAP_UPDATED_TYPE = "map_updated";
@@ -65,7 +66,7 @@ public class SyncMapAgent extends SynchronizedAgent {
 			JSONObject mapNode = rootNode.getJSONObject(Constants.MESSAGE_CONTENT);
 			JSONArray nodeArray = mapNode.getJSONArray(MAP_PAYLOAD);
 			for (Object obj : nodeArray) {
-				notifyObserver(MAP_INFORMATION_UPDATED, this, parseMapInformation((JSONObject) obj));
+				parseMapInformation((JSONObject) obj);
 			}
 		} else if (rootNode.getString(Constants.INTERNAL_MESSAGE_TYPE).equals(REQUEST_WHOLE_MAP)) {
 			answerMapRequest(msg);

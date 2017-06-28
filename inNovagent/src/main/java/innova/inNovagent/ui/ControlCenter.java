@@ -180,7 +180,6 @@ public class ControlCenter extends JPanel {
 
 	private void connectToAntWorld() {
 		AgentLauncher.instance().setIPAdress(this.ipInputField.getText());
-		// TODO not perfect, but prevents an accidental click before clicking "connect"
 		paintMapBttn.setEnabled(true);
 		launchBttn.setEnabled(true);
 	}

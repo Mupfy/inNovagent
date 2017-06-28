@@ -7,6 +7,11 @@ import java.util.Map;
 
 import innova.inNovagent.util.Point;
 
+/**
+ * Representation of the antworld.
+ * The Map is a graph with nodes that hold all known informations of the world.
+ *
+ */
 public class NodeMap {
 	private Map<Point, Node> field;
 	
@@ -24,6 +29,12 @@ public class NodeMap {
 		maxY = 0;
 	}
 	
+	/**
+	 * Creates a new node if the field was not visited before.
+	 * Else it returns the old node.
+	 * @param point
+	 * @return
+	 */
 	public Node createOrGet(Point point) {
 
 		Node res = field.get(point);
@@ -57,30 +68,63 @@ public class NodeMap {
 		return res;
 	}
 	
+	/**
+	 * Returns the whole map.
+	 * @return
+	 */
 	public Map<Point, Node> getField() {
 		return field;
 	}
-
+	
+	/**
+	 * Get a single node.
+	 * If it not exists it returns null.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public Node getNode(int x, int y) {
 		return this.field.get(new Point(x, y));
 	}
 	
+	/**
+	 * Get a single node.
+	 * If it not exists it returns null.
+	 * @param point
+	 * @return
+	 */
 	public Node getNode(Point point){
 		return getNode(point.getX(), point.getY());
 	}
-
+	
+	/**
+	 * The lowest x value of all nodes.
+	 * @return
+	 */
 	public int getMinX() {
 		return minX;
 	}
-
+	
+	/**
+	 * The lowest y value of all nodes.
+	 * @return
+	 */
 	public int getMinY() {
 		return minY;
 	}
-
+	
+	/**
+	 * The width from the lowest node to the greatest one.
+	 * @return
+	 */
 	public int getWidth() {
 		return maxX - minX + 1;
 	}
-
+	
+	/**
+	 * The height from the lowest node to the greatest one.
+	 * @return
+	 */
 	public int getHeight() {
 		return maxY - minY + 1;
 	}

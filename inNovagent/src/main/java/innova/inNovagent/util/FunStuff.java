@@ -3,19 +3,22 @@ package innova.inNovagent.util;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * The inner child class.
+ *
+ */
 public class FunStuff {
 	
 	private static final String[] AGENTNAMES = {
-			"Antman",
-			"Antlord",
-			"Antastisch",
-			"Antnastsia",
-			"AntGueltig",
-			"Antlager",
-			"Antgent47",
-			"Antgent007",
-			"Antschlossen"
+			"Innovagent_Antman",
+			"Innovagent_Antlord",
+			"Innovagent_Antastisch",
+			"Innovagent_Antnastsia",
+			"Innovagent_AntGueltig",
+			"Innovagent_Antlager",
+			"Innovagent_Antgent47",
+			"Innovagent_Antgent007",
+			"Innovagent_Antschlossen"
 	};
 	private static final Map<String, Integer> GIVEN_AGENT_NAMES = new HashMap<>();
 	public static String createNameForAgent(){

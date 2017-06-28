@@ -14,6 +14,9 @@ import innova.inNovagent.core.NodeMap;
 import innova.inNovagent.util.Point;
 import innova.inNovagent.util.Utils;
 
+/**
+ * Implementation of the Dijkstra-algorithm
+ */
 public class DijkstraPathfinding implements Pathfinding{
 	
 	private class Data{
@@ -109,31 +112,6 @@ public class DijkstraPathfinding implements Pathfinding{
 			current = current.ancestor;
 		}
 		return Utils.PointToDirection(source.father.getPosition(), current.father.getPosition());
-	}
-
-	@Override
-	public List<Node> getNearestUnvisited() {
-		PriorityQueue<Data> queue = new PriorityQueue<>( (d1,d2) -> {
-			
-			if(d1.father.isVisited() && !d2.father.isVisited()){
-				return 1;
-			}
-			
-			if(d2.father.isVisited() && !d1.father.isVisited()){
-				return -1;
-			}
-			return d1.distance - d2.distance;
-		});
-		queue.addAll(allNodes);
-		
-		List<Node> res = new ArrayList<>();
-		Data current = queue.poll();
-		while(current != null && !current.father.isVisited()){
-			res.add(current.father);
-			current = queue.poll();
-		}
-		return res;
-		
 	}
 
 	@Override

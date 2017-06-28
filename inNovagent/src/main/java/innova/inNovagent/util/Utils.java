@@ -8,7 +8,6 @@ public final class Utils {
 	
 	private Utils(){}
 	
-	// TODO unnötig?
 	/**
 	 * Returns the object if it's not null, otherwise it throws a
 	 * NullPointerException.
@@ -44,18 +43,15 @@ public final class Utils {
 	/**
 	 * Consistently logs the messages with the logger.
 	 * 
-	 * @param logger
-	 *            the logger which logs the message
-	 * @param agentName
-	 *            the name of the agent
-	 * @param message
-	 *            the message to be logged
+	 * @param logger the logger which logs the message
+	 * @param agentName the name of the agent
+	 * @param message the message to be logged
 	 */
 	public static void consistentAgentLog(Logger logger, String agentName, Object message){
 		StringBuilder b = new StringBuilder();
 		b.append("----START").append(System.lineSeparator())
-		.append("#").append(agentName).append(": " + message).append(System.lineSeparator());
-		b.append("----END");
+		.append("#").append(agentName).append(": " + message).append(System.lineSeparator())
+		.append("----END");
 		logger.debug(b.toString());
 	}
 

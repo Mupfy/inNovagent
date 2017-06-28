@@ -8,15 +8,17 @@ import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JPanel;
 
+import innova.inNovagent.agents.MapPainterAgent;
 import innova.inNovagent.agents.SyncMapAgent;
 import innova.inNovagent.core.Node;
 import innova.inNovagent.core.NodeMap;
 import innova.inNovagent.util.Point;
 
 /**
- * The map-gui. Gets the informations about the map from the MapPainterAgent and
+ * The map-gui. Gets the informations about the map from the {@link MapPainterAgent} and
  * shows all known Nodes and their information.
  */
+@SuppressWarnings("serial")
 public class MapPainter extends JPanel {
 	private SyncMapAgent mapPainterAgent;
 	

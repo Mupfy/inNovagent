@@ -2,8 +2,10 @@ package innova.inNovagent.communication;
 
 import org.json.JSONObject;
 
-import innova.inNovagent.util.Point;
-
+/**
+ * Abstraction class for reaction to antworld messages.
+ *
+ */
 public interface AntWorldFlowController {
 	interface OnDeathCallback {
 		public void callback();
@@ -14,9 +16,6 @@ public interface AntWorldFlowController {
 	interface OnFailedMovementCallback {
 		public void onFailedMovement();
 	}
-	interface PositionAccess {
-		public Point getLastPosition();
-	}
 	
 	public void setOnDeathCallback(OnDeathCallback callback);
 	public void setOnSuccessfulMovement(OnMovementCallback callback);
@@ -26,5 +25,9 @@ public interface AntWorldFlowController {
 	
 	public void setMessageTranslator(AntWorldMessageTranslator translator);
 	
+	/**
+	 * Processes the given antworld message and calls the corresponding callbacks.
+	 * @param rootNode The antoworld message.
+	 */
 	public void consumeMessage(JSONObject rootNode);
 }

@@ -86,6 +86,10 @@ public class Node {
 		return this;
 	}
 	
+	/**
+	 * Returns true if not stone or a trap.
+	 * @return
+	 */
 	public boolean isAccessible(){
 		return !this.isStone && !this.isTrap;
 	}

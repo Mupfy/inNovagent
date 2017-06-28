@@ -24,7 +24,9 @@ import jade.lang.acl.ACLMessage;
  * The base class of all inNovaGent-Agents. The {@link SynchronizedAgent}
  * will automatically seek other {@link SynchronizedAgent} in Jade and will
  * include them in his intern known agent list. 
+ * It will also handle messages.
  */
+@SuppressWarnings("serial")
 public abstract class SynchronizedAgent extends Agent {
 
 	private static final String SERVICE_NAME = "ANTWORLD_2017_INNOVAGENT_SERVICE";
@@ -38,18 +40,14 @@ public abstract class SynchronizedAgent extends Agent {
 	
 	private static final String MESSAGE_TYPE = "MESSAGE_TYPE";
 	
-	
-
 	private static final String AGENT_ID = "AGENT_ID";
 
 	private Set<AID> knowAgents;
-	private Set<AgentObserver> observers;
 
 	private boolean service;
 
 	public SynchronizedAgent() {
 		this.knowAgents = new HashSet<>();
-		this.observers = new HashSet<>();
 	}
 
 	public Set<AID> getKnownAgents() {
@@ -86,22 +84,18 @@ public abstract class SynchronizedAgent extends Agent {
 		}
 		super.takeDown();
 	}
-
+	
+	/**
+	 * Called as soon this agent knows all its big brothers and little sisters.
+	 */
 	protected abstract void onSync();
-
+	
+	/**
+	 * This method will be called if a message occurs and can't be handled by {@link SynchronizedAgent}
+	 * @param msg
+	 * @param content
+	 */
 	protected abstract void receiveDispatchedMessage(ACLMessage msg, JSONObject content);
-	
-	public void addObserver(AgentObserver observer){
-		observers.add(observer);
-	}
-	
-	public void removeObserver(AgentObserver observer){
-		observers.remove(observer);
-	}
-	
-	protected void notifyObserver(Object type, Object...args){
-		this.observers.forEach( o -> o.agentModified(this,  type, args));
-	}
 	
 	/**
 	 * Runs a task on the internal update schedule
@@ -159,7 +153,6 @@ public abstract class SynchronizedAgent extends Agent {
 		
 		if(NEW_AGENT_TAG.equals(type) ){
 			this.knowAgents.add(new AID(content.getString(AGENT_ID),true) );
-			notifyObserver("NEW_AGENT", content.getString(AGENT_ID));
 			
 		}else if(REMOVE_AGENT_TAG.equals(type) ){
 			this.knowAgents.remove(new AID(content.getString(AGENT_ID),true) );

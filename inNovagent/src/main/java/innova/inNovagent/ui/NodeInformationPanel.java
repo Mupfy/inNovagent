@@ -11,6 +11,7 @@ import innova.inNovagent.core.Node;
  * A panel that shows detailed information about single Nodes.
  */
 public class NodeInformationPanel extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private JLabel position;
 	private JLabel honey;
 	private JLabel smell;
@@ -43,8 +44,7 @@ public class NodeInformationPanel extends JPanel {
 	/**
 	 * Updates the informations to the ones of the given node.
 	 * 
-	 * @param node
-	 *            the node which informations should be displayed
+	 * @param node the node which informations should be displayed
 	 */
 	public void updateNodeInformation(Node node) {
 		if (node != null) {

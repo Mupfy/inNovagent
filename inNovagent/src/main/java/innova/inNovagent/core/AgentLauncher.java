@@ -9,6 +9,10 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
+/**
+ * Helper-Class to start a single agent.
+ *
+ */
 public final class AgentLauncher {
 	
 	private static final String[] EMPTY_ARRAY = new String[0];

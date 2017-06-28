@@ -70,12 +70,16 @@ public class DijkstraPathfindingTest {
 		map.getNode(point(0,0) ).setVisited(false);
 		classUnderTest.recalculateMap(map, source);
 		
-		assertEquals(point(0,0), classUnderTest.getNearestUnvisited().get(0).getPosition());
+		assertEquals(point(0,0), classUnderTest.getNearest( node -> !node.isVisited()).get(0).getPosition());
 		
-		map.getNode(point(0,0) ).setVisited(false);
+		map.getNode(point(2,1) ).setVisited(false);
 		map.getNode(point(1,0) ).setVisited(false);
-		map.getNode(point(2,0) ).setVisited(false);
+		map.getNode(point(1,2) ).setVisited(false);
 		
-		assertEquals(3, classUnderTest.getNearestUnvisited().size());
+		// N V N
+		// N S V
+		// N V N
+		
+		assertEquals(3, classUnderTest.getNearest( node -> !node.isVisited()).size());
 	}
 }

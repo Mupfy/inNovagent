@@ -5,7 +5,6 @@ import innova.inNovagent.core.Node;
 /**
  * Simple Data-Holder to store information about Antworld.
  * If you look for a real Node implementation look at {@link Node}
- * @author Tyrone
  *
  */
 public class NodeInformationTO {

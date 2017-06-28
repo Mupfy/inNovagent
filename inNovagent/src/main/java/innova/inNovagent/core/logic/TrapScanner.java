@@ -1,17 +1,22 @@
 package innova.inNovagent.core.logic;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Set;
-import java.util.Stack;
-import java.util.stream.Collectors;
 
 import innova.inNovagent.core.Node;
 import innova.inNovagent.core.NodeMap;
 
+/**
+ * Logic for evaluating each node for traps, danger or even safety.
+ * 
+ */
 public class TrapScanner {
+	
+	/**
+	 * Evaluates the given map.
+	 * @param map
+	 */
 	public void evaluate(NodeMap map){
 		markDangerous(map);
 	}
@@ -38,6 +43,10 @@ public class TrapScanner {
 		return false;
 	}
 	
+	/**
+	 * Evaluates a single node and all surrounding nodes that have changed. 
+	 * @param source
+	 */
 	public void evaluateFromSource(Node source){
 		Queue<Node> touchedNodes = new LinkedList<>();
 		touchedNodes.add(source);
@@ -49,7 +58,7 @@ public class TrapScanner {
 					if(!n.isVisited() && !n.isSafe()){
 						n.setTrap(true);
 						n.setVisited(true);
-						n.setDangerous(true); //TODO:  is a trap sill dangerous?
+						n.setDangerous(true);
 						
 						touchedNodes.addAll(n.getNeighbours());
 					}
@@ -61,9 +70,7 @@ public class TrapScanner {
 						if(n.isDangerous() && !n.isTrap()){ 
 							n.setDangerous(false);
 							n.setSafe(true);
-							if(!touchedNodes.contains(n)){ // TODO eric hasst sich (zu recht)
-								touchedNodes.add(n);
-							}
+							touchedNodes.add(n);
 						}
 					}
 				}
@@ -105,61 +112,5 @@ public class TrapScanner {
 			}
 		}
 		return (unknown - stench) == 0;
-	}
-	
-	private int getAccumulatedStench(Node source){
-		int res = 0;
-		for(Node n : source.getNeighbours() ){
-			res += n.getStench();
-		}
-		return res;
-	}
-	
-	// TODO -.-
-	protected void placeholder_name(Node source){
-		Set<Node> touchedNodes = new HashSet<>();
-		Stack<Node> evaluationStack = new Stack<>();
-		evaluationStack.push(source);
-		Node current = null;
-		while(!evaluationStack.isEmpty() ){
-			current = evaluationStack.peek();
-			touchedNodes.add(current);
-			if(isEvaluationReady(current) ){
-				evaluationStack.pop();
-				evaluateFromSource(current);
-			}else{
-				current.getNeighbours().stream()
-				.filter( n -> !touchedNodes.contains(n) )
-				.forEach( n -> {
-					evaluationStack.push(null);
-					touchedNodes.add(n);
-				});
-			}
-		}
-	}
-	
-	protected boolean isEvaluationReady(Node n){
-		return n.isVisited() || n.isTrap() || isStenchNeutralizing(n);
-	}
-	
-	private boolean isAlternativePossible(NodeMap original, Set<Node> alternative){
-		for(Node alt : alternative){
-			Node n = original.getNode(alt.getPosition());
-			if(n.getStench() != alt.getStench()){
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	private void createAlternative(NodeMap original, Node source){
-		Set<Node> unknowns = source.getNeighbours().stream().filter( n -> !n.isVisited()).collect(Collectors.toSet());
-		for(Node n : unknowns){
-			NodeMap alternative = new NodeMap();
-			
-		}
-	}
-	private Set<Node> getDifference(Set<Node> all, Node without){
-		return all.stream().filter( n -> n != without).collect(Collectors.toSet());
 	}
 }
