@@ -3,6 +3,7 @@ package innova.inNovagent.agents;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -25,7 +26,6 @@ import innova.inNovagent.util.Point;
 import innova.inNovagent.util.Utils;
 import jade.lang.acl.ACLMessage;
 
-//TODO FIND SMELL OVER UNKNWON.
 /**
  * The ant which moves on the field.
  */
@@ -77,12 +77,26 @@ public class Innovagent extends SyncMapAgent {
 		public Point getNextTarget() {
 			Innovagent.this.pathfinding.setNodeFilter(node -> !node.isStone() && !node.isTrap() && !node.isDangerous());
 			pathfinding.recalculateMap(getMap(), position);
-
+                                                          
 			List<Node> foodNodes = pathfinding.getNearest(Node::hasHoney);
 			if (!foodNodes.isEmpty()) {
 				Utils.consistentAgentLog(LOGGER, agentName, "food found. Go to nearest one");
 				int index = (int) (Math.random() * foodNodes.size());
 				return foodNodes.get(index).getPosition();
+			}
+			
+			
+			List<Node> smellNodes = pathfinding.getNearest( n -> n.getSmell() > 0);
+			if(!smellNodes.isEmpty() ){
+				Utils.consistentAgentLog(LOGGER, agentName, "smell found. Go to nearest one");
+				int index = (int) (Math.random() * smellNodes.size());
+				
+				Node target = smellNodes.get(index);
+				for(Node n : target.getNeighbours() ){
+					if(n.isAccessible() && !n.isDangerous() && !n.isVisited()){
+						return n.getPosition();
+					}
+				}
 			}
 
 			List<Node> unknownNodes = pathfinding.getNearest(node -> !node.isVisited());
@@ -208,7 +222,14 @@ public class Innovagent extends SyncMapAgent {
 			carryingFood = true;
 			Node node = nodeMap.getNode(position);
 			node.setHoneyAmount(node.getHoneyAmount() - 1);
-			shareAntWorldUpdate(Arrays.asList(node));
+			List<Node> changedNodes = new LinkedList<>();
+			changedNodes.add(node);
+			for(Node n: node.getNeighbours()){
+				int newSmell = n.getSmell() - 1;
+				n.setSmell( newSmell > 0 ? newSmell : 0);
+				changedNodes.add(n);
+			}
+			shareAntWorldUpdate(changedNodes);
 			currentState = STATE_CARRYING;
 			tryMoving();
 		});
@@ -295,12 +316,16 @@ public class Innovagent extends SyncMapAgent {
 		shareAntWorldUpdate(Arrays.asList(node));
 		return node;
 	}
+	
+	private boolean hasNodeChanged(Node node, NodeInformationTO data){
+		return !node.isVisited() || node.getHoneyAmount() != data.getHoney() || node.getSmell() != data.getSmell();
+	}
 
 	private Node basicSuccessfulMovemnt(NodeInformationTO data) {
 		this.lastPosition = position;
 		Node node = getMap().createOrGet(position);
-		if (!(node.isVisited() && node.getHoneyAmount() == data.getHoney())) { // Is this a new node or
-																				// did the honey amount change.
+		if (hasNodeChanged(node, data)) { 
+			
 			node.setVisited(true);
 			applyDataToNode(node, data);
 			expandNode(node);

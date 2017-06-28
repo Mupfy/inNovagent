@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import innova.inNovagent.agents.MapPainterAgent;
@@ -128,14 +127,4 @@ public class MapPainter extends JPanel {
 		}
 	}
 	
-	private void createColorChooserPanel(JPanel panel){
-		JComboBox<String> comboBox = new JComboBox<>();
-		comboBox.addItem("ANT_COLOR_GREEN");
-		comboBox.addItem("ANT_COLOR_YELLOW");
-		comboBox.addItem("ANT_COLOR_RED");
-		comboBox.addItem("ANT_COLOR_BLUE");
-		comboBox.addItemListener( item -> {
-			
-		});
-	}
 }
