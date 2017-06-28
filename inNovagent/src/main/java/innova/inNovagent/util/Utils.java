@@ -55,7 +55,6 @@ public final class Utils {
 		logger.debug(b.toString());
 	}
 
-	// TODO warum in utils? wird nur an einer stelle gebraucht
 	/**
 	 * Calculates and returns the orthogonal next direction on a grid you have
 	 * to follow to get to the point.
@@ -83,7 +82,6 @@ public final class Utils {
 		}
 	}
 	
-	// TODO warum in utils? wird nur an einer stelle gebraucht
 	/**
 	 * Calculates a new point from a direction and a point.
 	 * 

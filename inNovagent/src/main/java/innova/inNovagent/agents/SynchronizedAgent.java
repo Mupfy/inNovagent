@@ -13,7 +13,6 @@ import innova.inNovagent.util.Constants;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -96,19 +95,6 @@ public abstract class SynchronizedAgent extends Agent {
 	 * @param content
 	 */
 	protected abstract void receiveDispatchedMessage(ACLMessage msg, JSONObject content);
-	
-	/**
-	 * Runs a task on the internal update schedule
-	 * @param toExecute
-	 */
-	protected synchronized void runLater(Runnable toExecute){
-		addBehaviour( new OneShotBehaviour() {
-			@Override
-			public void action() {
-				toExecute.run();
-			}
-		});
-	}
 
 	private void initMessageConsumer() {
 		addBehaviour(new CyclicBehaviour() {

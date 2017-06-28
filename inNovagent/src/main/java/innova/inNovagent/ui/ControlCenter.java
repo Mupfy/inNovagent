@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +33,7 @@ import jade.wrapper.StaleProxyException;
  * elements to connect to antworld, create and reset the map (new frame) and to
  * create and remove agents.
  */
+@SuppressWarnings("serial")
 public class ControlCenter extends JPanel {
 	private static final Logger LOGGER = Logger.getLogger(ControlCenter.class);
 
@@ -72,6 +74,8 @@ public class ControlCenter extends JPanel {
 		agentOverviewContainer.setPreferredSize(new Dimension(getPreferredSize().width, 600));
 		add(agentOverviewContainer);
 	}
+	
+	
 
 	private void createIpPanel(JPanel userInputPanel) {
 		JPanel ipPanel = new JPanel();

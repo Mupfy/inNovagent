@@ -25,20 +25,45 @@ import innova.inNovagent.util.Point;
 import innova.inNovagent.util.Utils;
 import jade.lang.acl.ACLMessage;
 
-//TODO: Kein error-handling verhanden, falls z.B. ein pick kommt und dieser bereits aufgehoben wurde.
+//TODO FIND SMELL OVER UNKNWON.
 /**
  * The ant which moves on the field.
  */
+@SuppressWarnings("serial")
 public class Innovagent extends SyncMapAgent {
-
+	
+	
+	
+	/**
+	 * Internal capsulated state of the agent which can be implemented by
+	 * different behaviors.
+	 *
+	 */
 	private interface AgentState {
+		
+		/**
+		 * Gives the agent the next target he will try to reach with each round.
+		 */
 		public Point getNextTarget();
 
+		/**
+		 * Shows the state that the agent reached a node.
+		 * @param n
+		 */
 		public void reachedNode(Node n);
-
+		
+		/**
+		 * Tells the agent to skip movement this round
+		 * so it can do other actions.
+		 * @return
+		 */
 		public boolean skipMovement();
 	}
-
+	
+	/**
+	 * Scouts the map for honey.
+	 * 
+	 */
 	private class StateScouting implements AgentState {
 		private boolean skip;
 
@@ -57,9 +82,7 @@ public class Innovagent extends SyncMapAgent {
 			if (!foodNodes.isEmpty()) {
 				Utils.consistentAgentLog(LOGGER, agentName, "food found. Go to nearest one");
 				int index = (int) (Math.random() * foodNodes.size());
-				return foodNodes.get(index).getPosition(); // TODO: Choose to
-															// visit which node
-															// smarter.
+				return foodNodes.get(index).getPosition();
 			}
 
 			List<Node> unknownNodes = pathfinding.getNearest(node -> !node.isVisited());
@@ -82,9 +105,7 @@ public class Innovagent extends SyncMapAgent {
 			return START_POSITION;
 		}
 
-		/**
-		 * 
-		 */
+		
 		public void reachedNode(Node n) {
 			if (!carryingFood && n.hasHoney()) {
 				skip = true;
@@ -99,7 +120,11 @@ public class Innovagent extends SyncMapAgent {
 			return skip;
 		}
 	}
-
+	
+	/**
+	 * Will bring honey home
+	 *
+	 */
 	private class StateCarrying implements AgentState {
 
 		private boolean skip;
@@ -124,7 +149,11 @@ public class Innovagent extends SyncMapAgent {
 			return skip;
 		}
 	}
-
+	
+	/**
+	 * Now the real journey begins.
+	 * Because you are dead. 
+	 */
 	private class StateDead implements AgentState {
 		public Point getNextTarget() {
 			return START_POSITION;
@@ -183,6 +212,13 @@ public class Innovagent extends SyncMapAgent {
 			currentState = STATE_CARRYING;
 			tryMoving();
 		});
+		flowController.setOnFailedPickUp( () -> {
+			Node node = nodeMap.getNode(position);
+			node.setHoneyAmount(0);
+			shareAntWorldUpdate(Arrays.asList(node));
+			currentState = STATE_SCOUTING;
+			tryMoving();
+		});
 		flowController.setMessageTranslator(TRANSLATOR);
 		this.pathfinding = new DijkstraPathfinding();
 		this.pathfinding.setNodeFilter(node -> !node.isStone() && !node.isTrap() && !node.isDangerous());
@@ -214,10 +250,15 @@ public class Innovagent extends SyncMapAgent {
 	protected void receiveDispatchedMessage(ACLMessage msg, JSONObject rootNode) {
 		Utils.consistentAgentLog(LOGGER, agentName, "received message with: " + rootNode.toString(4));
 		if (rootNode.has(Constants.INTERNAL_MESSAGE_TYPE)) {
-			super.receiveDispatchedMessage(msg, rootNode);
+			if(rootNode.getString(Constants.INTERNAL_MESSAGE_TYPE).equals(Constants.CHANGE_COLOR)){
+				String color = rootNode.getJSONObject(Constants.MESSAGE_CONTENT).getString(Constants.COLOR);
+				this.COMMUNICATOR.setAgentColor(color);
+			}else{				
+				super.receiveDispatchedMessage(msg, rootNode);
+			}
 		} else {
 			COMMUNICATOR.setLastMessage(msg);
-			flowController.consumeMessage(rootNode);
+			flowController.consumeMessage(msg, rootNode);
 		}
 	}
 

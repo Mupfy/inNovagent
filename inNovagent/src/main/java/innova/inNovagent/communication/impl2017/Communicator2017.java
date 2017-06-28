@@ -24,10 +24,11 @@ public class Communicator2017 implements AntWorldCommunicator {
 	private Agent agent;
 	private AID antworld2017Agent;
 	private ACLMessage lastMessage;
+	private String agentColor;
 	
 	public Communicator2017(Agent agent){
 		this.agent = agent;
-		
+		this.agentColor = "ANT_COLOR_BLUE";
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class Communicator2017 implements AntWorldCommunicator {
 		JSONObject birthRequest = new JSONObject();
 		birthRequest
 		.put("type", "ANT_ACTION_BIRTH")
-		.put("color", "ANT_COLOR_BLUE"); // TODO: Make color choosable from a menu.
+		.put("color", this.agentColor );
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(antworld2017Agent);
 		msg.setContent(birthRequest.toString());
@@ -81,7 +82,7 @@ public class Communicator2017 implements AntWorldCommunicator {
 		msg.setLanguage(Constants.JSON_TAG);
 		
 		JSONObject content = new JSONObject().put("type", command);
-		content.put("color", "ANT_COLOR_BLUE");
+		content.put("color", this.agentColor);
 		msg.setContent( content.toString());
 		this.agent.send(msg);
 		Utils.consistentAgentLog(LOGGER, agent.getLocalName(), "sending ACL-Message with: " + content.toString(4) + " GENERATED ACL message " + msg);
@@ -110,5 +111,10 @@ public class Communicator2017 implements AntWorldCommunicator {
 	@Override
 	public void setLastMessage(ACLMessage msg) {
 		this.lastMessage = msg;
+	}
+
+	@Override
+	public void setAgentColor(String colorOfAgent) {
+		this.agentColor = colorOfAgent;
 	}
 }

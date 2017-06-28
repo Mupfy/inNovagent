@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import innova.inNovagent.agents.MapPainterAgent;
@@ -62,7 +63,6 @@ public class MapPainter extends JPanel {
 
 		map = mapPainterAgent.getMap();
 		squareWidth = getWidth() / map.getWidth();
-		// TODO height does not get updated
 		squareHeight = getHeight() / map.getHeight();
 		paintSquares(g);
 		paintGrid(g);
@@ -100,7 +100,7 @@ public class MapPainter extends JPanel {
 
 	private void paintHoney(Node node, int x, int y, Graphics g) {
 		int honeyAmount = node.getHoneyAmount();
-		if (honeyAmount > 0) {
+		if (honeyAmount != 0) {
 			g.setColor(HONEY_COLOR);
 			int xEdge = squareWidth / 4;
 			int yEdge = squareHeight / 4;
@@ -126,5 +126,16 @@ public class MapPainter extends JPanel {
 		for (int i = 1; i < map.getHeight(); ++i) {
 			g.drawLine(0, getHeight() - i * squareHeight, getWidth(), getHeight() - i * squareHeight);
 		}
+	}
+	
+	private void createColorChooserPanel(JPanel panel){
+		JComboBox<String> comboBox = new JComboBox<>();
+		comboBox.addItem("ANT_COLOR_GREEN");
+		comboBox.addItem("ANT_COLOR_YELLOW");
+		comboBox.addItem("ANT_COLOR_RED");
+		comboBox.addItem("ANT_COLOR_BLUE");
+		comboBox.addItemListener( item -> {
+			
+		});
 	}
 }

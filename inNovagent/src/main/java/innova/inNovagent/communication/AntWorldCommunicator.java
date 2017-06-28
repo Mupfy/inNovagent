@@ -15,6 +15,8 @@ public interface AntWorldCommunicator {
 	public void pickUp();
 	public void drop();
 	
+	public void setAgentColor(String colorOfAgent);
+	
 	public void login();
 	/**
 	 * Needs the last response from antworld for the next message.

@@ -7,6 +7,7 @@ import innova.inNovagent.communication.AntWorldFlowController;
 import innova.inNovagent.communication.AntWorldMessageTranslator;
 import innova.inNovagent.communication.NodeInformationTO;
 import innova.inNovagent.util.Utils;
+import jade.lang.acl.ACLMessage;
 
 /**
  * Controls what happens after an action was performed (When an agent died /
@@ -25,12 +26,7 @@ public class FlowController2017 implements AntWorldFlowController {
 	private AntWorldMessageTranslator messageTranslator;
 	private Runnable onPick;
 	private Runnable onDrop;
-
-	/**
-	 * These are the x and y of antworld and not of the internal used
-	 * coordinates
-	 */
-	private int x = -1, y = -1;
+	private Runnable onFailedPick;
 
 	@Override
 	public void setOnDeathCallback(OnDeathCallback callback) {
@@ -53,14 +49,18 @@ public class FlowController2017 implements AntWorldFlowController {
 	}
 
 	@Override
-	public void consumeMessage(JSONObject rootNode) {
+	public void consumeMessage(ACLMessage original, JSONObject rootNode) {
 		LOGGER.debug("Starting to consume Message");
 		NodeInformationTO data = messageTranslator.translate(rootNode);
 
-		// TODO failed oder nicht? laufen evtl immer zum start zurück, ohne honig zu haben
 		if (PICK_ACTION.equals(rootNode.getString("action"))) {
-			this.onPick.run();
-			return;
+			if(ACLMessage.REFUSE == original.getPerformative() ){
+				this.onFailedPick.run();
+				return;
+			}else{				
+				this.onPick.run();
+				return;
+			}
 		}
 
 		if (DROP_ACTION.equals(rootNode.getString("action"))) {
@@ -74,20 +74,14 @@ public class FlowController2017 implements AntWorldFlowController {
 			LOGGER.debug("Ending consuming with: death");
 			return;
 		}
-
-		if (this.x == data.getX() && this.y == data.getY() || data.isStone()) { // TODO Abfrage erweitern verändern, wenn durch
-																				// zufall die initialwerte und der spawnpunkt
-																				// auf dem gleichem fleck liegen
-																				// TODO Ist die abfrage nach "isStone" ausreichend?
+		
+		if(ACLMessage.REFUSE == original.getPerformative() ){	
 			this.failedMovementCallback.onFailedMovement();
 			LOGGER.debug("Ending consuming with: failedMvnt");
 			return;
 		}
 
-		LOGGER.debug("MVNT successful: old x " + this.x + " | new x " + data.getX() + " : old y " + this.y + " | new y "
-				+ data.getY());
-		this.x = data.getX();
-		this.y = data.getY();
+		
 		this.movementCallback.onSuccessfulMovement(data);
 		LOGGER.debug("Ending consuming with: success");
 	}
@@ -100,6 +94,11 @@ public class FlowController2017 implements AntWorldFlowController {
 	@Override
 	public void setOnPickCallback(Runnable callback) {
 		this.onPick = Utils.notNull(callback);
+	}
+
+	@Override
+	public void setOnFailedPickUp(Runnable callback) {
+		this.onFailedPick = callback;
 	}
 
 }
